@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { Text, View, Pressable, TextInput, Switch } from 'react-native';
-import styles from './styles.js'
+import styles from './styles.js';
+import { container, header, content } from '../../styles/index.js'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 
 export default class App extends Component {
@@ -15,7 +16,10 @@ export default class App extends Component {
     }
 
     state = {
-        switchValue: false
+        switchValue: false,
+        emailInput: null,
+        status: false,
+        email: null,
     }
 
     onIconPress = () => {
@@ -27,22 +31,48 @@ export default class App extends Component {
         })
     }
 
-    toggleSwitch = value => {
-        this.setState({ switchValue: value });
+    componentDidMount() {
+        this.setState({ switchValue: false, status: false})
     }
+
+    toggleSwitch = value => {
+        this.setState({ switchValue: value, status: value });
+    }
+
+    _login = async () => {
+        if(this.state.switchValue === false) {
+            if(this.state.emailInput.match(/@/)) {
+                alert('E-mail Invalido');
+            }
+            else {
+                const userEmail = await this.state.emailInput + '@aluno.ifsp.edu.br';
+                this.setState({ email: userEmail});
+            }
+        }
+    }
+
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.header}/>
+            <View style={container}>
+                <StatusBar style="light" />
+                <View style={header}/>
 
-                <View style={styles.content}>
+                <View style={content}>
                     <Text style={styles.title}> Entre com sua conta e {"\n"} contribua com a comunidade </Text>
                     
                     <View style={styles.loginScreen}>
                         <Text style={styles.text}> E-mail </Text>
                         <View style={styles.email}>
-                            <TextInput style={styles.loginInput}/>
+                            <TextInput 
+                                style={styles.loginInput}
+                                onChangeText={(inputValue) => this.setState({ emailInput: inputValue })}
+                            />
+                            {
+                                this.state.status ? null : <Text>
+                                    @aluno.ifsp.edu.br
+                                </Text>
+                            }
                         </View>
 
                         <Text style={styles.text}> Senha </Text>
@@ -83,7 +113,7 @@ export default class App extends Component {
                                 },
                                 styles.button
                             ]}
-                            //onPress={() => alert('Pressionado')}
+                            onPress={this._login}
                         >
                                 <Text style={styles.buttonText}>
                                     Entrar {" "}
