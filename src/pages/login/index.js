@@ -2,24 +2,19 @@ import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { Text, View, Pressable, TextInput, Switch } from 'react-native';
 import styles from './styles.js';
-import { container, header, content } from '../../styles/index.js'
+import { container, title, content, Input, text, button, icon } from '../../styles/index.js';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
-export default class App extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            secureTextEntry: true,
-            iconName: "eye",
-        }
-    }
+export default class Login extends Component {
 
     state = {
         switchValue: false,
         emailInput: null,
         status: false,
         email: null,
+        secureTextEntry: true,
+        iconName: "eye"
     }
 
     onIconPress = () => {
@@ -51,21 +46,25 @@ export default class App extends Component {
         }
     }
 
+    function(props) {
+        const navigation = useNavigation();
+        return <MyBackButton {...props} navigation={navigation} />
+    }
 
     render() {
+        const { navigation } = this.props;
         return (
             <View style={container}>
                 <StatusBar style="light" />
-                <View style={header}/>
 
                 <View style={content}>
-                    <Text style={styles.title}> Entre com sua conta e {"\n"} contribua com a comunidade </Text>
+                    <Text style={title}> Entre com sua conta e {"\n"} contribua com a comunidade </Text>
                     
-                    <View style={styles.loginScreen}>
-                        <Text style={styles.text}> E-mail </Text>
-                        <View style={styles.email}>
+                    <View style={Input.inputField}>
+                        <Text style={Input.inputFieldText}> E-mail </Text>
+                        <View style={Input.inputView}>
                             <TextInput 
-                                style={styles.loginInput}
+                                style={Input.input}
                                 onChangeText={(inputValue) => this.setState({ emailInput: inputValue })}
                             />
                             {
@@ -75,10 +74,10 @@ export default class App extends Component {
                             }
                         </View>
 
-                        <Text style={styles.text}> Senha </Text>
-                        <View style={styles.password}>
+                        <Text style={Input.inputFieldText}> Senha </Text>
+                        <View style={Input.inputView}>
                             <TextInput {...this.props} 
-                                style={styles.passwordInput}
+                                style={Input.input}
                                 secureTextEntry={this.state.secureTextEntry}
                             />
                             <Pressable onPress={this.onIconPress}>
@@ -111,25 +110,25 @@ export default class App extends Component {
                                     ? '#43515c'
                                     : '#2D363D'
                                 },
-                                styles.button
+                                button.button
                             ]}
                             onPress={this._login}
                         >
-                                <Text style={styles.buttonText}>
+                                <Text style={button.text}>
                                     Entrar {" "}
                                 </Text>
-                                <Icon name="location-enter" style={styles.icon} />
+                                <Icon name="location-enter" style={icon} />
                         </Pressable>
 
-                        <Text style={styles.textAccount}>Ainda não possui uma conta?</Text>
-                        <Pressable>
+                        <Text style={text}>Ainda não possui uma conta?</Text>
+                        <Pressable
+                            onPress={() => navigation.navigate('cadastroPasso1')}
+                        >
                             <Text style={styles.createAccount}>Crie uma conta</Text>
                         </Pressable>
                     </View>
-
                 </View>
             </View>
         );
     }
 }
-
