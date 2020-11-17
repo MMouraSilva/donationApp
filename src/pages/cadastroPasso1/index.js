@@ -1,18 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { Text, View, Pressable, TextInput, Switch } from 'react-native';
+import { Text, View, Pressable, TextInput } from 'react-native';
 import styles from './styles.js';
-import { container, title, content, Input, text, button, icon } from '../../styles/index.js';
-import { TextInputMask } from 'react-native-masked-text'
+import { container, title, content, Input, button, icon } from '../../styles/index.js';
+import { TextInputMask } from 'react-native-masked-text';
 import { RadioButton } from 'react-native-paper';
 import { FontAwesome5 as Icon, Ionicons as Ioicon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 
-export default class App extends Component {
+export default class cadastroPasso1 extends Component {
 
     state = {
         dt: null,
         checked: null
+    }
+
+    _continueRegister = async () => {
+        const { navigation } = this.props;
+        navigation.navigate('cadastroPasso2', {visible: false});
+    }
+
+    function(props) {
+        const navigation = useNavigation();
+        return <MyBackButton {...props} navigation={navigation} />
     }
 
     render() {
@@ -67,7 +78,7 @@ export default class App extends Component {
                                     status={checked === 'second' ? 'checked' : 'unchecked'}
                                     onPress={() => { this.setState({ checked: 'second' }); }}
                                 />
-                                <View>
+                                <View style={styles.textView}>
                                     <Text style={styles.subText}> Apenas para estudantes do IFSP! </Text>
                                     <Text style={styles.text}> Sou um recebedor </Text>
                                 </View>
@@ -86,7 +97,7 @@ export default class App extends Component {
                                 },
                                 button.button
                             ]}
-                            onPress={this._login}
+                            onPress={this._continueRegister}
                         >
                                 <Text style={button.text}>
                                     Prosseguir {"   "}

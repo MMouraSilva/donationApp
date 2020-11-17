@@ -25,6 +25,11 @@ const styles = StyleSheet.create({
     
     iconButton: {
         marginLeft: 80
+    },
+
+    textView: {
+        flexDirection: "column",
+        alignItems: "flex-start",
     }
 })
 
