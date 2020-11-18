@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { Text, View, Pressable, TextInput, VirtualizedList } from 'react-native';
+import { Text, View, Pressable, TextInput } from 'react-native';
 import styles from './styles.js';
-import { container, title, content, Input, text, button, icon } from '../../styles/index.js';
+import { container, title, content, Input, button, icon } from '../../styles/index.js';
 import { TextInputMask } from 'react-native-masked-text';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import Modal from 'react-native-modal';
+import AbandonarCadastro from '../abandonarCadastro/index.js';
 
 export default class cadastroPasso2 extends Component {
 
@@ -116,14 +116,6 @@ export default class cadastroPasso2 extends Component {
                                         <TextInputMask
                                             type={'custom'}
                                             options={{
-                                                /**
-                                                 * mask: (String | required | default '')
-                                                 * the mask pattern
-                                                 * 9 - accept digit.
-                                                 * A - accept alpha.
-                                                 * S - accept alphanumeric.
-                                                 * * - accept all, EXCEPT white space.
-                                                */
                                                 mask: 'AA',
                                                 translation: { 
                                                     A: val => val.toUpperCase() 
@@ -165,39 +157,13 @@ export default class cadastroPasso2 extends Component {
                     </View>
                 </View>
                 
-                <Modal
-                    animationType="fade"
-                    transparent={true}
+                <AbandonarCadastro 
                     isVisible={this.state.modalVisible}
                     onRequestClose={() => this.setState({ modalVisible: !this.state.modalVisible })}
                     onBackdropPress={() => this.setState({ modalVisible: !this.state.modalVisible })}
-                    swipeDirection={('down')}
                     onSwipeComplete={() => this.setState({ modalVisible: !this.state.modalVisible })}
-                >
-                    <View style={styles.modal}>
-                        <View style={styles.modalHeader}/>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle} > Abandonar cadastro </Text>
-                            <Text> {"\n"} Você tem certeza que quer abandonar o {"\n"} cadastro e voltar para a tela inicial? {"\n"}{"\n"}</Text>
-
-                            <Pressable
-                                style={({ pressed }) => [
-                                    {
-                                        backgroundColor: pressed
-                                        ? '#43515c'
-                                        : '#2D363D',
-                                    },
-                                    button.button
-                                ]}
-                                onPress={this._abandon}
-                            >
-                                    <Text style={button.text}>
-                                        Sim, abandonar {" "}
-                                    </Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </Modal>
+                    onPress={this._abandon}
+                />
             </View>
         );
     }

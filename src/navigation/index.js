@@ -4,21 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import login from '../pages/login';
 import cadastroPasso1 from '../pages/cadastroPasso1';
 import cadastroPasso2 from '../pages/cadastroPasso2';
-import { Pressable, View } from 'react-native';
-import { Ionicons as Icon } from '@expo/vector-icons';
 import styles from './styles.js';
 
 const Stack = createStackNavigator();
 
 export default class Navigation extends Component {
-
-    state = {
-        modalVisible: false
-    }
-
-    /*handleIconPress =  async (modalVisible) =>  {
-        modalVisible = true;
-    }*/
 
     render(){
         return(
