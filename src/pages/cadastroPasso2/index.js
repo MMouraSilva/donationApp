@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { Text, View, Pressable, TextInput } from 'react-native';
 import styles from './styles.js';
-import { container, title, content, Input, button, icon } from '../../styles/index.js';
+import { container, title, content, Input, button, icon, headerRight } from '../../styles/index.js';
 import { TextInputMask } from 'react-native-masked-text';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -26,7 +26,7 @@ export default class cadastroPasso2 extends Component {
     const { navigation } = this.props;
         navigation.setOptions({
         headerRight: () => (
-            <View style={styles.quitButtonView}>
+            <View style={headerRight}>
                 <Pressable
                     onPress={() => {
                         this.setState({ modalVisible: true })
@@ -45,6 +45,11 @@ export default class cadastroPasso2 extends Component {
             index: 0,
             routes: [{ name: 'login' }],
         });
+    }
+
+    _continueRegister = async () => {
+        const { navigation } = this.props;
+        navigation.navigate('cadastroDoador')
     }
 
     render() {

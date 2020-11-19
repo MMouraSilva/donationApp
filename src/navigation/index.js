@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import login from '../pages/login';
 import cadastroPasso1 from '../pages/cadastroPasso1';
 import cadastroPasso2 from '../pages/cadastroPasso2';
+import cadastroAluno from '../pages/cadastroAluno';
+import cadastroDoador from '../pages/cadastroDoador';
 import styles from './styles.js';
 
 const Stack = createStackNavigator();
@@ -38,6 +40,30 @@ export default class Navigation extends Component {
                     <Stack.Screen 
                         name="cadastroPasso2" 
                         component={cadastroPasso2} 
+                        options={{ 
+                            title: '',
+                            headerStyle: {
+                                backgroundColor: '#2D363D'
+                            },
+                            headerTintColor: '#fff',
+
+                        }}
+                    />
+                    <Stack.Screen 
+                        name="cadastroAluno" 
+                        component={cadastroAluno} 
+                        options={{ 
+                            title: '',
+                            headerStyle: {
+                                backgroundColor: '#2D363D'
+                            },
+                            headerTintColor: '#fff',
+
+                        }}
+                    />
+                    <Stack.Screen 
+                        name="cadastroDoador" 
+                        component={cadastroDoador} 
                         options={{ 
                             title: '',
                             headerStyle: {
