@@ -7,6 +7,7 @@ import { TextInputMask } from 'react-native-masked-text';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AbandonarCadastro from '../abandonarCadastro/index.js';
+import cepService from './../../service/cepService';
 
 export default class cadastroPasso2 extends Component {
 
@@ -20,6 +21,10 @@ export default class cadastroPasso2 extends Component {
         cep: null,
         number: null,
         uf: null,
+        address:'',
+        number:'',
+        complement:'',
+        city:'',
     }
 
     componentDidMount() {
@@ -52,6 +57,21 @@ export default class cadastroPasso2 extends Component {
         navigation.navigate('cadastroDoador')
     }
 
+     getCep = async (text) => {
+        this.setState({
+            cep: text
+        });
+        if(text && text.length == 9){
+            text = text.replace('-','');
+            const data = await cepService.getCep(text);
+            this.setState({
+                address: data.street,
+                city: data.city,
+                uf: data.state,
+            });
+        }
+    }
+
     render() {
         return (
             <View style={container}>
@@ -66,17 +86,19 @@ export default class cadastroPasso2 extends Component {
                             style={Input.input}
                             type={'zip-code'}
                             value={this.state.cep}
-                            onChangeText={text => {
-                                this.setState({
-                                cep: text
-                                })
+                            onChangeText={text => {                                                               
+                                this.getCep(text);
                             }}
                         />
                         </View>
                         
-                        <Text style={Input.inputFieldText}> Logradouro </Text>
+                        <Text style={Input.inputFieldText} > Logradouro </Text>
                         <View style={Input.inputView}>
-                            <TextInput style={Input.input}/>
+                            <TextInput style={Input.input} value={this.state.address} onChangeText={text => {                                                               
+                                this.setState({
+                                    address: text
+                                });
+                            }}/>
                         </View>
 
                         <View style={styles.inputField}>
@@ -99,23 +121,27 @@ export default class cadastroPasso2 extends Component {
                                 </View>
 
                                 <View style={styles.inputContent}>
-                                    <Text style={styles.inputFieldText}> Complemento </Text>
+                                    <Text style={styles.inputFieldText} > Complemento </Text>
                                     <View style={styles.inputView}>
-                                        <TextInput style={styles.input}/>
+                                        <TextInput style={styles.input} onChangeText={text => {                                                               
+                                        this.setState({ complement: text });
+                                    }}/>
                                     </View>
                                 </View>
                             </View>
 
                             <View style={styles.inputPair}>
                                 <View style={styles.inputContent}>
-                                    <Text style={styles.inputFieldText}> Cidade </Text>
+                                    <Text style={styles.inputFieldText} > Cidade </Text>
                                     <View style={styles.inputView}>
-                                        <TextInput style={styles.input}/>
+                                        <TextInput style={styles.input} value={this.state.city} onChangeText={text => {                                                               
+                                        this.setState({ city: text });
+                                    }}/>
                                     </View>
                                 </View>
 
                                 <View style={styles.inputContent}>
-                                    <Text style={styles.inputFieldText}> UF </Text>
+                                    <Text style={styles.inputFieldText} > UF </Text>
                                     <View style={styles.inputView}>
                                         
                                         <TextInputMask

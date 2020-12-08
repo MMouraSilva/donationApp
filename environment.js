@@ -1,0 +1,1 @@
+exports.urlApi = 'http://localhost:3000';

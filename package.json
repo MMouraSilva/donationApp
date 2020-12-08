@@ -13,6 +13,8 @@
     "@react-navigation/native": "^5.8.8",
     "@react-navigation/stack": "^5.12.5",
     "expo": "~39.0.2",
+    "axios": "^0.21.0",
+    "cep-promise": "^4.0.3",
     "expo-status-bar": "~1.0.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
