@@ -122,7 +122,7 @@ export default class Login extends Component {
 
                         <Text style={text}>Ainda não possui uma conta?</Text>
                         <Pressable
-                            onPress={() => navigation.navigate('cadastroPasso1')}
+                            onPress={() => navigation.navigate('fluxoCadastro')}
                         >
                             <Text style={styles.createAccount}>Crie uma conta</Text>
                         </Pressable>
