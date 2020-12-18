@@ -22,6 +22,8 @@ export default class fluxoCadastro extends Component {
     state = {
         name: null,
         email: null,
+        password: null,
+        confirmPassword: null,
         date_of_birth: null,
         type_user: null,
         cep: null,
@@ -534,6 +536,7 @@ export default class fluxoCadastro extends Component {
                                 <View style={Input.inputView}>
                                     <TextInput {...this.props} 
                                         style={Input.input}
+                                        onChangeText={(text) => this.setState({ password: text })}
                                         secureTextEntry={this.state.secureTextEntry}
                                     />
                                     <Pressable onPress={this.onIconPress}>
@@ -545,6 +548,7 @@ export default class fluxoCadastro extends Component {
                                 <View style={Input.inputView}>
                                     <TextInput {...this.props} 
                                         style={Input.input}
+                                        onChangeText={(text) => this.setState({ confirmPassword: text })}
                                         secureTextEntry={this.state.secureTextEntry}
                                     />
                                 </View>
@@ -587,12 +591,6 @@ export default class fluxoCadastro extends Component {
                         />
                     </View>
                 )
-
-            default:
-                return (
-                  <div>You are a User.</div>
-                )
-
         }
     }
 }

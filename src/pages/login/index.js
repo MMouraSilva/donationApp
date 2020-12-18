@@ -13,6 +13,8 @@ export default class Login extends Component {
         emailInput: null,
         status: false,
         email: null,
+        password: null,
+        type_user: null,
         secureTextEntry: true,
         iconName: "eye"
     }
@@ -35,6 +37,7 @@ export default class Login extends Component {
     }
 
     _login = async () => {
+        const { navigation } = this.props;
         if(this.state.switchValue === false) {
             if(this.state.emailInput.match(/@/)) {
                 alert('E-mail Invalido');
@@ -42,6 +45,12 @@ export default class Login extends Component {
             else {
                 const userEmail = await this.state.emailInput + '@aluno.ifsp.edu.br';
                 this.setState({ email: userEmail});
+
+                const { navigation } = this.props;
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'telaInicial' }],
+                });
             }
         }
     }
