@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     radioField: {
@@ -72,7 +73,8 @@ const styles = StyleSheet.create({
     },
 
     buttonView: {
-        flex: 4
+        flex: 4,
+        marginTop: 80
     },
 
     headerLeft: {
@@ -98,9 +100,26 @@ const styles = StyleSheet.create({
         marginBottom: 50
     },
 
-    dataPicker: {
-        marginTop: 10.5
-    }
+    datePicker: {
+        marginTop: 15,
+        marginBottom: 5,
+        borderWidth: 1,
+        borderColor: "#000",
+    },
+
+    dateText: {
+        marginLeft: 5,
+        marginRight: 5,
+        marginTop: 2
+    },
+
+    dateIcon: {
+        fontSize: 40,
+        textAlign: 'center',
+        color: '#2D363D',
+        marginTop: 8,
+        marginLeft: 5
+    },
 })
 
 export default styles;
