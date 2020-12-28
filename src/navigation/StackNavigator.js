@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import login from '../pages/login';
 import fluxoCadastro from '../pages/fluxoCadastro';
-import telaInicial from '../pages/telaInicial';
+import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
 
 export default class Navigation extends Component {
 
@@ -37,14 +35,10 @@ export default class Navigation extends Component {
                         }}
                     />
                     <Stack.Screen 
-                        name="telaInicial" 
-                        component={telaInicial} 
+                        name="DrawerNavigator" 
+                        component={DrawerNavigator} 
                         options={{ 
-                            title: '',
-                            headerStyle: {
-                                backgroundColor: '#2D363D'   
-                            },
-                            headerTintColor: '#fff'
+                            headerShown: false
                         }}
                     />
                 </Stack.Navigator>

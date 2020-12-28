@@ -6,6 +6,7 @@ import { container, title, content, Input, text, button, icon, titleView } from 
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import userService from './../../service/userService.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Login extends Component {
 
@@ -20,6 +21,14 @@ export default class Login extends Component {
         iconName: "eye"
     }
 
+    clearSessionCreateAccount = async () => {
+        try {
+            await AsyncStorage.clear()
+        } catch(e) {
+            console.log("Deu erro:", e);
+        }
+    }
+
     onIconPress = () => {
         let iconName = this.state.secureTextEntry ? "eye-off" : "eye"
 
@@ -31,6 +40,7 @@ export default class Login extends Component {
 
     componentDidMount() {
         this.setState({ switchValue: false, status: false})
+        this.clearSessionCreateAccount();
     }
 
     toggleSwitch = value => {
@@ -39,25 +49,26 @@ export default class Login extends Component {
 
     _login = async () => {
         const { navigation } = this.props;
+        let userEmail = this.state.emailInput;
         try{
-            if(this.state.switchValue === false) {
+            if(this.state.switchValue == false) {
                 if(this.state.emailInput.match(/@/)) {
                     Alert.alert('E-mail Invalido');
                     return;
                 }
+                userEmail = this.state.emailInput + '@aluno.ifsp.edu.br';
             }
-            const userEmail = await this.state.emailInput + '@aluno.ifsp.edu.br';
-            this.setState({ email: userEmail});
 
             const loginForms = {
-                email: this.state.email,
+                email: userEmail,
                 password: this.state.password
             }
+
             const session = await userService.login(loginForms);
 
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'telaInicial' }],
+                routes: [{ name: 'DrawerNavigator' }],
             });
         }catch(error) {
             console.log("Erro ao fazer login", error);
@@ -93,7 +104,8 @@ export default class Login extends Component {
                                 <TextInput 
                                     style={Input.input}
                                     onChangeText = {(emailInput) => this.setState({ emailInput })}
-                                    />
+                                    autoCapitalize = 'none'
+                                />
                                 {
                                     this.state.status ? null : <Text>
                                         @aluno.ifsp.edu.br
@@ -145,7 +157,7 @@ export default class Login extends Component {
                                     <Text style={button.text}>
                                         Entrar {" "}
                                     </Text>
-                                    <Icon name="location-enter" style={icon} />
+                                    <Icon name="location-enter" style={icon.nextIcon} />
                             </Pressable>
 
                             <Text style={text}>Ainda não possui uma conta?</Text>

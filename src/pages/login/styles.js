@@ -1,6 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
-
-const windowWidth = Dimensions.get('window').width;
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   switch: {
@@ -9,13 +7,13 @@ const styles = StyleSheet.create({
 
   switchText: {
     fontSize: 16,
-    marginTop: 25,
-    marginBottom: 50,
+    marginTop: "7.5%",
+    marginBottom: "15%",
   },
   
   forgot: {
     alignItems: "flex-end",
-    marginTop: -25,
+    marginTop: "-7.5%",
   },
 
   forgotText: {

@@ -6,14 +6,14 @@ const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     radioField: {
         flexDirection: "row",
-        marginTop: 10,
+        marginTop: "3%",
         alignItems: 'center',
         justifyContent: 'flex-start'
     },
 
     radioView: {
-        marginTop: 10,
-        marginBottom: 80
+        marginTop: "3%",
+        marginBottom: "24%"
     },
 
     subText: {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
     
     iconButton: {
-        marginLeft: 80
+        marginLeft: "24%"
     },
 
     textView: {
@@ -33,12 +33,8 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
 
-    quitButtonView: {
-        marginRight: 20
-    },
-
     inputContent: {
-        marginRight: 10,
+        marginRight: "3%",
         width: '100%',
     },
 
@@ -61,65 +57,49 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         borderBottomWidth: 1,
         borderBottomColor: '#000',
-        height: 30,
-        marginBottom: 30
+        height: "40%",
     },
 
 
     input: {
-        height: 30,
+        height: "100%",
         width: windowWidth / 2 - 50,
         flex: 1,
     },
 
     buttonView: {
         flex: 4,
-        marginTop: 80
-    },
-
-    headerLeft: {
-        marginLeft: 20
+        marginTop: "20%"
     },
 
     checkBoxView: {
         flexDirection: 'row',
-        marginBottom: 80,
-        marginTop: 30,
+        marginBottom: "24%",
+        marginTop: "9%",
         alignItems: 'center',
     },
 
     checkBoxText: {
-        marginLeft: 10
+        marginLeft: "3%"
     },
 
     dateView: {
         flexDirection: "row",
         borderBottomWidth: 1,
         borderBottomColor: '#000',
-        height: 50,
-        marginBottom: 50
+        height: "6.5%",
+        marginBottom: "15%"
     },
 
     datePicker: {
-        marginTop: 15,
-        marginBottom: 5,
-        borderWidth: 1,
-        borderColor: "#000",
+        marginTop: "2%",
+        marginBottom: "1.5%",
     },
 
     dateText: {
-        marginLeft: 5,
-        marginRight: 5,
-        marginTop: 2
-    },
-
-    dateIcon: {
-        fontSize: 40,
-        textAlign: 'center',
-        color: '#2D363D',
-        marginTop: 8,
-        marginLeft: 5
-    },
+        marginLeft: "1.5%",
+        marginRight: "1.5%",
+    }
 })
 
 export default styles;

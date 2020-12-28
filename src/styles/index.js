@@ -5,7 +5,7 @@ import Input  from './input.js';
 import text from './text.js';
 import button from './button.js';
 import icon from './icon.js';
-import headerRight from './headerRight.js';
+import header from './header.js';
 import titleView from './titleView.js';
 
-export { container, content, title, Input, text, button, icon, headerRight, titleView };
+export { container, content, title, Input, text, button, icon, header, titleView };

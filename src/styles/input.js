@@ -16,15 +16,15 @@ const Input = StyleSheet.create({
         flexDirection: "row",
         borderBottomWidth: 1,
         borderBottomColor: '#000',
-        height: 30,
-        marginBottom: 30
+        height: "6%",
+        marginBottom: "9%",
+        alignItems: "center"
     },
 
 
     input: {
-        height: 30,
+        height: "100%",
         width: windowWidth - 100,
-        marginBottom: 40,
         flex: 1
     },
 });

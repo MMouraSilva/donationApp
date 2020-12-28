@@ -1,7 +1,7 @@
 const text = {
     fontSize: 14,
     textAlign: "center",
-    marginTop: 50
+    marginTop: "15%"
 }
 
 export default text;

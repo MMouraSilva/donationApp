@@ -3,41 +3,16 @@ import React, { Component } from 'react';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 import styles from './styles.js';
 import { container, content, Input, text } from '../../styles/index.js';
-import { useNavigation } from '@react-navigation/native';
 import { Octicons as OcIcons, FontAwesome as FtIcons } from '@expo/vector-icons';
 
 export default class telaInicial extends Component {
-    
-    function(props) {
-        const navigation = useNavigation();
-        return <MyBackButton {...props} navigation={navigation} />
-    }
-
     state = {
         page: 'inicial',
         categoria: 'Todos os equipamentos',
         equipamento: []
     }
 
-    _menu = async () => {
-
-    }
-
     componentDidMount () {
-        const { navigation } = this.props;
-
-        if(this.state.page == 'inicial') {
-            navigation.setOptions({
-
-                headerLeft: () => (
-                    <View style={styles.headerLeft}>
-                        <Pressable onPress={this._menu}>
-                            <FtIcons name="reorder" size={30} color="#fff" />
-                        </Pressable>
-                    </View>
-                ),
-            })
-        }
     }
 
     render () {
@@ -52,6 +27,11 @@ export default class telaInicial extends Component {
                         >
                             <StatusBar style="light" />
                             <View style={styles.header}>
+                                <Pressable onPress={this.props.navigation.openDrawer}>
+                                    <FtIcons name="reorder" style={styles.headerIcon}/>
+                                </Pressable>
+                            </View>
+                            <View style={styles.subHeader}>
                                 <Pressable
                                     style={() => [
                                         styles.headerButton

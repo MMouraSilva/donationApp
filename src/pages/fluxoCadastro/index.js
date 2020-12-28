@@ -2,15 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { Text, View, Pressable, TextInput, Alert, ScrollView } from 'react-native';
 import styles from './styles.js';
-import { container, title, content, Input, button, icon, headerRight, titleView } from '../../styles/index.js';
+import { container, title, content, Input, button, icon, header, titleView } from '../../styles/index.js';
 import { TextInputMask } from 'react-native-masked-text';
 import { RadioButton } from 'react-native-paper';
 import {
     FontAwesome5 as FontIcon,
     Ionicons as Ioicon,
     MaterialCommunityIcons as MtcIcon, 
-    MaterialIcons as MtIcon,
-    Foundation as FdtIcon
+    MaterialIcons as MtIcon
 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AbandonarCadastro from '../abandonarCadastro/index.js';
@@ -18,6 +17,7 @@ import cepService from './../../service/cepService';
 import CheckBox from '@react-native-community/checkbox';
 import userService from './../../service/userService.js';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class fluxoCadastro extends Component {
 
@@ -44,80 +44,91 @@ export default class fluxoCadastro extends Component {
         iconName: "eye",
         toggleCheckBox: false,
         isDatePickerVisible: false,
-        showDate: null
+        showDate: null,
     }
+
+    setSessionCreateAccount = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.mergeItem('@sessionCreateAccount', jsonValue)
+        } catch (e) {
+            console.log("Deu erro: ", e);
+        }
+    }
+
+    
+    getSessionCreateAccount = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@sessionCreateAccount')
+            return jsonValue != null ? JSON.parse(jsonValue) : null;
+        } catch(e) {
+            console.log("Deu erro:", e);
+        }
+    }
+
+    clearSessionCreateAccount = async () => {
+        try {
+            await AsyncStorage.clear()
+        } catch(e) {
+            console.log("Deu erro:", e);
+        }
+    }
+  
 
     _cadastroPasso2 = async () => {
         const { navigation } = this.props;
   
-        if (this.state.name === null || this.state.date_of_birth === null || this.state.type_user === null)
+        if (this.state.name == null || this.state.date_of_birth == null || this.state.type_user == null
+            || this.state.name.length < 3)
         {
             Alert.alert('Erro', 'Preencha todos os campos!');
             return;
         }
-        navigation.push('fluxoCadastro', {
-            name: this.state.name,
-            date_of_birth: this.state.date_of_birth,
-            type_user: this.state.type_user,
-            page: 'cadastroPasso2' })
+        
+        await navigation.push('fluxoCadastro', {page: 'cadastroPasso2'})
     }
     
     _cadastroPasso3 = async () => {
         const { navigation } = this.props;
-        if (this.state.cep === null || this.state.address === null || this.state.number === null 
-            || this.state.complement === null || this.state.city === null || this.state.uf === null) {
+        if (this.state.cep == null || this.state.address == null || this.state.number == null 
+            || this.state.city == null || this.state.uf == null || this.state.cep.length < 8
+            || this.state.address.length < 3 || this.state.number.length < 1 || this.state.city.length < 3 
+            || this.state.uf.length !== 2 ) {
                 Alert.alert('Erro', 'Preencha todos os campos!')
+                return;
         }
-        else if (this.state.type_user === 'd') {
-            navigation.push('fluxoCadastro', { 
-                name: this.state.name,
-                date_of_birth: this.state.date_of_birth,
-                type_user: this.state.type_user,
-                cep: this.state.cep,
-                address: this.state.address,
-                number: this.state.number,
-                complement: this.state.complement,
-                city: this.state.city,
-                uf: this.state.uf,
-                page: 'cadastroDoador' })
-            }
-            else if (this.state.type_user === 'r') {
-                navigation.push('fluxoCadastro', { 
-                    name: this.state.name,
-                    date_of_birth: this.state.date_of_birth,
-                    type_user: this.state.type_user,
-                    cep: this.state.cep,
-                    address: this.state.address,
-                    number: this.state.number,
-                    complement: this.state.complement,
-                    city: this.state.city,
-                    uf: this.state.uf,
-                    page: 'cadastroRecebedor' })
+        
+        if (this.state.type_user == 'd') {
+            await navigation.push('fluxoCadastro', {page: 'cadastroDoador'})
+        } else if (this.state.type_user == 'r') {
+                await navigation.push('fluxoCadastro', {page: 'cadastroRecebedor'})
             }
     }
 
     _criarConta = async () => {
-        if(this.state.switchValue == false && this.state.email.match(/@/)) {
+        let userEmail = this.state.email;
+        if(this.state.type_user == 'r' && this.state.email.match(/@/)) {
             Alert.alert('E-mail Invalido', 'A criação deste tipo de conta é permitida apenas com o e-mail institucional.');
             return;
-        } else if(this.state.switchValue == true && !this.state.email.match(/@/)) {
+        } else if(this.state.type_user == 'd' && !this.state.email.match(/@/)) {
             Alert.alert('Erro', 'E-mail invalido.');
             return;
-        } else if(this.state.password == this.state.confirmPassword) {
+        } else if(this.state.password !== this.state.confirmPassword) {
             Alert.alert('Erro', 'As senhas devem ser iguais!');
             return;
         } else if(this.state.toggleCheckBox == false) {
             Alert.alert('Erro', 'Você deve concordar com os termos de uso.');
             return;
-        } else if(this.state.switchValue == false) {
-            const userEmail = await this.state.email + '@aluno.ifsp.edu.br';
+        }
+        if(this.state.type_user == 'r') {
+            userEmail = this.state.email + '@aluno.ifsp.edu.br';
             this.setState({ email: userEmail});
         }
 
         const { navigation } = this.props;
         const user = {
             name: this.state.name,
-            email: this.state.email,
+            email: userEmail,
             password: this.state.password,
             dateOfBirth: this.state.date_of_birth,
             typeUser: this.state.type_user,
@@ -131,7 +142,8 @@ export default class fluxoCadastro extends Component {
             
         try{
             const userCreated = await userService.create(user);
-            console.log(userCreated);
+            Alert.alert("Sucesso!", "Usuário criado com sucesso!");
+            this.clearSessionCreateAccount();
             navigation.navigate('login')
         }catch(error){
             console.log("Erro ao criar a conta", error);
@@ -151,6 +163,7 @@ export default class fluxoCadastro extends Component {
     
     _abandon = async () => {
         const { navigation } = this.props;
+        this.clearSessionCreateAccount();
         navigation.reset({
             index: 0,
             routes: [{ name: 'login' }],
@@ -169,23 +182,50 @@ export default class fluxoCadastro extends Component {
                 city: data.city,
                 uf: data.state,
             });
+            const sessionCreateAccount = { 
+                address: data.street,
+                city: data.city,
+                uf: data.state
+            }
+            this.setSessionCreateAccount(sessionCreateAccount);
         }
     }
     
     componentDidMount = async () => {
         const { navigation } = this.props;
         const { route } = this.props;
-        const { name, date_of_birth, type_user, cep, address, number, complement, city, uf, page } = route.params;
+        const page = route.params.page;
         const day = new Date().getDate();
         const month = new Date().getMonth() + 1;
         const year = new Date().getFullYear();
         const showDate = day + ("-") + month + ("-") + year
         this.setState({ showDate })
 
-        if (page == 'cadastroPasso2') {
-            navigation.setOptions({
+        if (page == 'cadastroPasso1') {
+            await navigation.setOptions({
+                headerLeft: () => (
+                    <View style={header.headerLeft}>
+                        <Pressable
+                            onPress={() => {
+                                this.clearSessionCreateAccount();
+                                navigation.goBack();
+                            }}
+                        >
+                            <Ioicon name="md-arrow-back" size={30} color="#fff" />
+                        </Pressable>
+                    </View>
+                )
+            })
+            const sessionCreateAccount = await this.getSessionCreateAccount();
+
+            if(sessionCreateAccount !== null) {
+                let { name, date_of_birth, type_user } = await sessionCreateAccount;
+                this.setState({ name, date_of_birth, type_user });
+            }
+        } else if (page == 'cadastroPasso2') {
+            await navigation.setOptions({
                 headerRight: () => (
-                    <View style={headerRight}>
+                    <View style={header.headerRight}>
                         <Pressable
                             onPress={() => {
                                 this.setState({ modalVisible: true })
@@ -194,14 +234,19 @@ export default class fluxoCadastro extends Component {
                             <Ioicon name="md-close" size={30} color="#fff" />
                         </Pressable>
                     </View>
-                ),
+                )
             })
 
-            this.setState({ name, date_of_birth, type_user })
+            const sessionCreateAccount = await this.getSessionCreateAccount();
+
+            if(sessionCreateAccount !== null) {
+                let { name, date_of_birth, type_user, cep, address, number, complement, city, uf } = await sessionCreateAccount;
+                this.setState({ name, date_of_birth, type_user, cep, address, number, complement, city, uf });
+            }
         } else if (page == 'cadastroDoador') {
-            navigation.setOptions({
+            await navigation.setOptions({
                 headerRight: () => (
-                    <View style={headerRight}>
+                    <View style={header.headerRight}>
                         <Pressable
                             onPress={() => {
                                 this.setState({ modalVisible: true })
@@ -210,14 +255,19 @@ export default class fluxoCadastro extends Component {
                             <Ioicon name="md-close" size={30} color="#fff" />
                         </Pressable>
                     </View>
-                ),
+                )
             })
 
-            this.setState({ name, date_of_birth, type_user, cep, address, number, complement, city, uf })
+            const sessionCreateAccount = await this.getSessionCreateAccount();
+
+            if(sessionCreateAccount !== null) {
+                let { name, date_of_birth, type_user, cep, address, number, complement, city, uf, email } = await sessionCreateAccount;
+                this.setState({ name, date_of_birth, type_user, cep, address, number, complement, city, uf, email });
+            }
         } else if (page == 'cadastroRecebedor') {
-            navigation.setOptions({
+            await navigation.setOptions({
                 headerRight: () => (
-                    <View style={headerRight}>
+                    <View style={header.headerRight}>
                         <Pressable
                             onPress={() => {
                                 this.setState({ modalVisible: true })
@@ -226,10 +276,15 @@ export default class fluxoCadastro extends Component {
                             <Ioicon name="md-close" size={30} color="#fff" />
                         </Pressable>
                     </View>
-                ),
+                )
             })
 
-            this.setState({ name, date_of_birth, type_user, cep, address, number, complement, city, uf })
+            const sessionCreateAccount = await this.getSessionCreateAccount();
+
+            if(sessionCreateAccount !== null) {
+                let { name, date_of_birth, type_user, cep, address, number, complement, city, uf, email } = await sessionCreateAccount;
+                this.setState({ name, date_of_birth, type_user, cep, address, number, complement, city, uf, email });
+            }
         }
     }
 
@@ -258,7 +313,11 @@ export default class fluxoCadastro extends Component {
                                         <TextInput 
                                             value={this.state.name}
                                             style={Input.input}
-                                            onChangeText={(text) => this.setState({ name: text })}
+                                            onChangeText={(text) => {
+                                                const sessionCreateAccount = { name: text }
+                                                this.setState({ name: text });
+                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                            }}
                                         />
                                     </View>
             
@@ -274,17 +333,18 @@ export default class fluxoCadastro extends Component {
                                                     {this.state.showDate}
                                                 </Text>
                                         </Pressable>
-                                        <FdtIcon name="calendar" style={styles.dateIcon} />
                                         <DateTimePickerModal
                                             isVisible={this.state.isDatePickerVisible}
                                             mode="date"
                                             onConfirm={(date) => {
                                                 const fullDate = date.getDate() + ("-") + (date.getMonth() + 1) + ("-") + date.getFullYear();
+                                                const sessionCreateAccount = { date_of_birth: fullDate }
                                                 this.setState({ 
                                                     date_of_birth: fullDate,
                                                     isDatePickerVisible: false,
                                                     showDate: fullDate
                                                 })
+                                                this.setSessionCreateAccount(sessionCreateAccount);
                                             }}
                                             onCancel={() => {
                                                 this.setState({ isDatePickerVisible: false })
@@ -299,7 +359,11 @@ export default class fluxoCadastro extends Component {
                                             <RadioButton
                                                 value="d"
                                                 status={type_user === 'd' ? 'checked' : 'unchecked'}
-                                                onPress={() => { this.setState({ type_user: "d" });} }
+                                                onPress={() => { 
+                                                    const sessionCreateAccount = { type_user: "d" }
+                                                    this.setState({ type_user: "d" });
+                                                    this.setSessionCreateAccount(sessionCreateAccount);
+                                                }}
                                             />
                                             <Text style={styles.text}> Sou um doador </Text>
                                         </View>
@@ -308,7 +372,11 @@ export default class fluxoCadastro extends Component {
                                             <RadioButton
                                                 value="r"
                                                 status={type_user === 'r' ? 'checked' : 'unchecked'}
-                                                onPress={() => { this.setState({ type_user: 'r' }); }}
+                                                onPress={() => { 
+                                                    const sessionCreateAccount = { type_user: "r" }
+                                                    this.setState({ type_user: "r" });
+                                                    this.setSessionCreateAccount(sessionCreateAccount);
+                                                }}
                                             />
                                             <View style={styles.textView}>
                                                 <Text style={styles.subText}> Apenas para estudantes do IFSP! </Text>
@@ -334,7 +402,7 @@ export default class fluxoCadastro extends Component {
                                             <Text style={button.text}>
                                                 Prosseguir {"   "}
                                             </Text>
-                                            <Ioicon name="ios-arrow-forward" style={icon} />
+                                            <Ioicon name="ios-arrow-forward" style={icon.nextIcon} />
                                     </Pressable>
                                 </View>
                             </View>
@@ -364,8 +432,10 @@ export default class fluxoCadastro extends Component {
                                         style={Input.input}
                                         type={'zip-code'}
                                         value={this.state.cep}
-                                        onChangeText={text => {                                                               
+                                        onChangeText={text => { 
                                             this.getCep(text);
+                                            const sessionCreateAccount = { cep: text }
+                                            this.setSessionCreateAccount(sessionCreateAccount);
                                         }}
                                     />
                                     </View>
@@ -376,9 +446,9 @@ export default class fluxoCadastro extends Component {
                                             style={Input.input} 
                                             value={this.state.address} 
                                             onChangeText={text => {                                                               
-                                                this.setState({
-                                                    address: text
-                                                });
+                                                this.setState({ address: text });
+                                                const sessionCreateAccount = { address: text }
+                                                this.setSessionCreateAccount(sessionCreateAccount);
                                             }}
                                         />
                                     </View>
@@ -394,9 +464,9 @@ export default class fluxoCadastro extends Component {
                                                         type={'only-numbers'}
                                                         value={this.state.number}
                                                         onChangeText={text => {
-                                                            this.setState({
-                                                                number: text
-                                                            })
+                                                            this.setState({ number: text });
+                                                            const sessionCreateAccount = { number: text }
+                                                            this.setSessionCreateAccount(sessionCreateAccount);
                                                         }}
                                                     />
                                                 </View>
@@ -410,6 +480,8 @@ export default class fluxoCadastro extends Component {
                                                         value={this.state.complement}
                                                         onChangeText={text => {                                                               
                                                             this.setState({ complement: text });
+                                                            const sessionCreateAccount = { complement: text }
+                                                            this.setSessionCreateAccount(sessionCreateAccount);
                                                         }}
                                                     />
                                                 </View>
@@ -425,6 +497,8 @@ export default class fluxoCadastro extends Component {
                                                         value={this.state.city} 
                                                         onChangeText={text => {                                                               
                                                             this.setState({ city: text });
+                                                            const sessionCreateAccount = { city: text }
+                                                            this.setSessionCreateAccount(sessionCreateAccount);
                                                         }}
                                                     />
                                                 </View>
@@ -444,13 +518,12 @@ export default class fluxoCadastro extends Component {
                                                         }}
                                                         value={this.state.uf}
                                                         onChangeText={text => {
-                                                            this.setState({
-                                                            uf: text
-                                                            })
+                                                            this.setState({ uf: text });
+                                                            const sessionCreateAccount = { uf: text }
+                                                            this.setSessionCreateAccount(sessionCreateAccount);
                                                         }}
                                                         style={styles.input}
                                                     />
-            
                                                 </View>
                                             </View>
                                         </View>
@@ -471,7 +544,7 @@ export default class fluxoCadastro extends Component {
                                                 <Text style={button.text}>
                                                     Prosseguir {"   "}
                                                 </Text>
-                                                <Ioicon name="ios-arrow-forward" style={icon} />
+                                                <Ioicon name="ios-arrow-forward" style={icon.nextIcon} />
                                         </Pressable>
                                     </View>
             
@@ -509,7 +582,13 @@ export default class fluxoCadastro extends Component {
                                     <View style={Input.inputView}>
                                         <TextInput 
                                             style={Input.input}
-                                            onChangeText={(text) => this.setState({ email: text })}
+                                            value={this.state.email}
+                                            autoCapitalize = 'none'
+                                            onChangeText={(text) => {
+                                                this.setState({ email: text });
+                                                const sessionCreateAccount = { email: text }
+                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                            }}
                                         />
                                     </View>
             
@@ -518,6 +597,9 @@ export default class fluxoCadastro extends Component {
                                         <TextInput {...this.props} 
                                             style={Input.input}
                                             secureTextEntry={this.state.secureTextEntry}
+                                            onChangeText={(text) => {
+                                                this.setState({ password: text });
+                                            }}
                                         />
                                         <Pressable onPress={this.onIconPress}>
                                             <MtcIcon name={this.state.iconName} size={20} />
@@ -529,7 +611,10 @@ export default class fluxoCadastro extends Component {
                                         <TextInput {...this.props} 
                                             style={Input.input}
                                             secureTextEntry={this.state.secureTextEntry}
-                                            />
+                                            onChangeText={(text) => {
+                                                this.setState({ confirmPassword: text });
+                                            }}
+                                        />
                                     </View>
             
                                     <View style={styles.checkBoxView}>
@@ -554,7 +639,7 @@ export default class fluxoCadastro extends Component {
                                         ]} 
                                         onPress={this._criarConta}
                                         >
-                                        <MtIcon name="account-box" style={icon} />
+                                        <MtIcon name="account-box" style={icon.createIcon} />
                                         <Text style={button.text}>
                                             {" "} Criar minha conta 
                                         </Text>
@@ -592,7 +677,13 @@ export default class fluxoCadastro extends Component {
                                     <View style={Input.inputView}>
                                         <TextInput 
                                             style={Input.input}
-                                            onChangeText={(text) => this.setState({ email: text })}
+                                            value={this.state.email}
+                                            autoCapitalize = 'none'
+                                            onChangeText={(text) => {
+                                                this.setState({ email: text });
+                                                const sessionCreateAccount = { email: text }
+                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                            }}
                                         />
                                             <Text>
                                                 @aluno.ifsp.edu.br
@@ -642,7 +733,7 @@ export default class fluxoCadastro extends Component {
                                         ]} 
                                         onPress={this._criarConta}
                                         >
-                                        <MtIcon name="account-box" style={icon} />
+                                        <MtIcon name="account-box" style={icon.nextIcon} />
                                         <Text style={button.text}>
                                             {" "} Criar minha conta 
                                         </Text>

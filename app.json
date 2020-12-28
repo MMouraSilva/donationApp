@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ifsp_cubatao.doacao"
     },
     "web": {
       "favicon": "./assets/favicon.png"

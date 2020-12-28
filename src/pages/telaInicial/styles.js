@@ -4,8 +4,20 @@ const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     header: {
+        height: "40%",
+        backgroundColor: "#2D363D",
+    },
+
+    headerIcon: {
+        color: "#fff",
+        fontSize: 30,
+        marginTop: 50,
+        marginLeft: 20
+    },
+    
+    subHeader: {
         width: windowWidth,
-        height: 50,
+        height: "25%",
         backgroundColor: '#2D363D',
         flexDirection: 'row',
         alignItems: 'center',
@@ -23,29 +35,30 @@ const styles = StyleSheet.create({
     },
 
     headerLeft: {
-        marginLeft: 20
+        marginLeft: 10
     },
 
     scrollView: {
-        height: '100%',
-        width: windowWidth
+        height: "100%",
+        width: windowWidth,
+        marginTop: "12%",
     },
 
     scrollViewContainer: {
         justifyContent: 'flex-end',
         alignItems: 'center',
         width: windowWidth - 80,
-        marginHorizontal: 40,
+        marginHorizontal: "12%",
     },
 
     text: {
-        marginTop: 30,
-        marginLeft: 40,
+        marginTop: "9%",
+        marginLeft: "9.5%",
         fontSize: 11
     },
 
     textCategoria: {
-        marginLeft: 40,
+        marginLeft: "9.5%",
         fontWeight: 'bold'
     }
 })

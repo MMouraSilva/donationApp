@@ -1,5 +1,5 @@
 const titleView = {
-    marginBottom: 80
+    marginBottom: "24%"
 }
 
 export default titleView;

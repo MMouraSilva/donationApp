@@ -7,8 +7,8 @@ const title = {
     fontSize: 20,
     width: windowWidth - 70,
     flex: 1,
-    marginTop: 40,
-    marginBottom: -20
+    marginTop: "12%",
+    marginBottom: "-6%"
   }
 
   export default title;
