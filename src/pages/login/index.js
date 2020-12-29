@@ -21,7 +21,7 @@ export default class Login extends Component {
         iconName: "eye"
     }
 
-    setSessionCreateAccount = async (value) => {
+    setStorage = async (value) => {
         try {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.mergeItem('@sessionAccount', jsonValue)
@@ -30,7 +30,7 @@ export default class Login extends Component {
         }
     }
 
-    clearSessionCreateAccount = async () => {
+    clearStorage = async () => {
         try {
             await AsyncStorage.clear()
         } catch(e) {
@@ -49,7 +49,7 @@ export default class Login extends Component {
 
     componentDidMount() {
         this.setState({ switchValue: false, status: false})
-        this.clearSessionCreateAccount();
+        this.clearStorage();
     }
 
     toggleSwitch = value => {
@@ -75,7 +75,7 @@ export default class Login extends Component {
 
             const session = await userService.login(loginForms);
 
-            this.setSessionCreateAccount(session.data);
+            this.setStorage(session.data);
 
             navigation.reset({
                 index: 0,

@@ -54,6 +54,40 @@ const styles = StyleSheet.create({
     textCategoria: {
         marginLeft: "9.5%",
         fontWeight: 'bold'
+    },
+
+    subTitle: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        marginTop: '5%',
+        marginLeft: '1%'
+    },
+
+    orderView: {
+        marginTop: '-15%',
+        width: windowWidth - 80,
+    },
+
+    orderContent: {
+        borderBottomWidth: 2,
+        borderBottomColor: '#FED500',
+        marginBottom: '5%',
+    },
+
+    orderButton: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: '5%'
+    },
+
+    orderText: {
+        fontSize: 18
+    },
+
+    orderIcon: {
+        fontSize: 20,
+        color: '#2D363D',
+        marginTop: '1.5%',
     }
 })
 

@@ -47,7 +47,7 @@ export default class fluxoCadastro extends Component {
         showDate: null,
     }
 
-    setSessionCreateAccount = async (value) => {
+    setStorage = async (value) => {
         try {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.mergeItem('@sessionCreateAccount', jsonValue)
@@ -57,7 +57,7 @@ export default class fluxoCadastro extends Component {
     }
 
     
-    getSessionCreateAccount = async () => {
+    getStorage = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('@sessionCreateAccount')
             return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -66,7 +66,7 @@ export default class fluxoCadastro extends Component {
         }
     }
 
-    clearSessionCreateAccount = async () => {
+    clearStorage = async () => {
         try {
             await AsyncStorage.clear()
         } catch(e) {
@@ -107,7 +107,7 @@ export default class fluxoCadastro extends Component {
 
     _criarConta = async () => {
         
-        const sessionCreateAccount = await this.getSessionCreateAccount();
+        const sessionCreateAccount = await this.getSessionCreategetStorageAccount();
 
         let { day, month, year } = await sessionCreateAccount;
         let currentYear = new Date().getFullYear();
@@ -164,7 +164,7 @@ export default class fluxoCadastro extends Component {
         try{
             const userCreated = await userService.create(user);
             Alert.alert("Sucesso!", "Usuário criado com sucesso!");
-            this.clearSessionCreateAccount();
+            this.clearStorage();
             navigation.navigate('login')
         }catch(error){
             console.log("Erro ao criar a conta", error);
@@ -184,7 +184,7 @@ export default class fluxoCadastro extends Component {
     
     _abandon = async () => {
         const { navigation } = this.props;
-        this.clearSessionCreateAccount();
+        this.clearStorage();
         navigation.reset({
             index: 0,
             routes: [{ name: 'login' }],
@@ -208,7 +208,7 @@ export default class fluxoCadastro extends Component {
                 city: data.city,
                 uf: data.state
             }
-            this.setSessionCreateAccount(sessionCreateAccount);
+            this.setStorage(sessionCreateAccount);
         }
     }
     
@@ -228,7 +228,7 @@ export default class fluxoCadastro extends Component {
                     <View style={header.headerLeft}>
                         <Pressable
                             onPress={() => {
-                                this.clearSessionCreateAccount();
+                                this.clearStorage();
                                 navigation.goBack();
                             }}
                         >
@@ -237,7 +237,7 @@ export default class fluxoCadastro extends Component {
                     </View>
                 )
             })
-            const sessionCreateAccount = await this.getSessionCreateAccount();
+            const sessionCreateAccount = await this.getStorage();
 
             if(sessionCreateAccount !== null) {
                 let { name, date_of_birth, type_user } = await sessionCreateAccount;
@@ -258,7 +258,7 @@ export default class fluxoCadastro extends Component {
                 )
             })
 
-            const sessionCreateAccount = await this.getSessionCreateAccount();
+            const sessionCreateAccount = await this.getStorage();
 
             if(sessionCreateAccount !== null) {
                 let { name, date_of_birth, type_user, cep, address, number, complement, city, uf } = await sessionCreateAccount;
@@ -279,7 +279,7 @@ export default class fluxoCadastro extends Component {
                 )
             })
 
-            const sessionCreateAccount = await this.getSessionCreateAccount();
+            const sessionCreateAccount = await this.getStorage();
 
             if(sessionCreateAccount !== null) {
                 let { name, date_of_birth, type_user, cep, address, number, complement, city, uf, email } = await sessionCreateAccount;
@@ -300,7 +300,7 @@ export default class fluxoCadastro extends Component {
                 )
             })
 
-            const sessionCreateAccount = await this.getSessionCreateAccount();
+            const sessionCreateAccount = await this.getStorage();
 
             if(sessionCreateAccount !== null) {
                 let { name, date_of_birth, type_user, cep, address, number, complement, city, uf, email } = await sessionCreateAccount;
@@ -340,7 +340,7 @@ export default class fluxoCadastro extends Component {
                                             onChangeText={(text) => {
                                                 const sessionCreateAccount = { name: text }
                                                 this.setState({ name: text });
-                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                                this.setStorage(sessionCreateAccount);
                                             }}
                                         />
                                     </View>
@@ -370,7 +370,7 @@ export default class fluxoCadastro extends Component {
                                                     isDatePickerVisible: false,
                                                     showDate: fullDate
                                                 })
-                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                                this.setStorage(sessionCreateAccount);
                                             }}
                                             onCancel={() => {
                                                 this.setState({ isDatePickerVisible: false })
@@ -388,7 +388,7 @@ export default class fluxoCadastro extends Component {
                                                 onPress={() => { 
                                                     const sessionCreateAccount = { type_user: "d" }
                                                     this.setState({ type_user: "d" });
-                                                    this.setSessionCreateAccount(sessionCreateAccount);
+                                                    this.setStorage(sessionCreateAccount);
                                                 }}
                                             />
                                             <Text style={styles.text}> Sou um doador </Text>
@@ -401,7 +401,7 @@ export default class fluxoCadastro extends Component {
                                                 onPress={() => { 
                                                     const sessionCreateAccount = { type_user: "r" }
                                                     this.setState({ type_user: "r" });
-                                                    this.setSessionCreateAccount(sessionCreateAccount);
+                                                    this.setStorage(sessionCreateAccount);
                                                 }}
                                             />
                                             <View style={styles.textView}>
@@ -461,7 +461,7 @@ export default class fluxoCadastro extends Component {
                                         onChangeText={text => { 
                                             this.getCep(text);
                                             const sessionCreateAccount = { cep: text }
-                                            this.setSessionCreateAccount(sessionCreateAccount);
+                                            this.setStorage(sessionCreateAccount);
                                         }}
                                     />
                                     </View>
@@ -474,7 +474,7 @@ export default class fluxoCadastro extends Component {
                                             onChangeText={text => {                                                               
                                                 this.setState({ address: text });
                                                 const sessionCreateAccount = { address: text }
-                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                                this.setStorage(sessionCreateAccount);
                                             }}
                                         />
                                     </View>
@@ -492,7 +492,7 @@ export default class fluxoCadastro extends Component {
                                                         onChangeText={text => {
                                                             this.setState({ number: text });
                                                             const sessionCreateAccount = { number: text }
-                                                            this.setSessionCreateAccount(sessionCreateAccount);
+                                                            this.setStorage(sessionCreateAccount);
                                                         }}
                                                     />
                                                 </View>
@@ -507,7 +507,7 @@ export default class fluxoCadastro extends Component {
                                                         onChangeText={text => {                                                               
                                                             this.setState({ complement: text });
                                                             const sessionCreateAccount = { complement: text }
-                                                            this.setSessionCreateAccount(sessionCreateAccount);
+                                                            this.setStorage(sessionCreateAccount);
                                                         }}
                                                     />
                                                 </View>
@@ -524,7 +524,7 @@ export default class fluxoCadastro extends Component {
                                                         onChangeText={text => {                                                               
                                                             this.setState({ city: text });
                                                             const sessionCreateAccount = { city: text }
-                                                            this.setSessionCreateAccount(sessionCreateAccount);
+                                                            this.setStorage(sessionCreateAccount);
                                                         }}
                                                     />
                                                 </View>
@@ -546,7 +546,7 @@ export default class fluxoCadastro extends Component {
                                                         onChangeText={text => {
                                                             this.setState({ uf: text });
                                                             const sessionCreateAccount = { uf: text }
-                                                            this.setSessionCreateAccount(sessionCreateAccount);
+                                                            this.setStorage(sessionCreateAccount);
                                                         }}
                                                         style={styles.input}
                                                     />
@@ -613,7 +613,7 @@ export default class fluxoCadastro extends Component {
                                             onChangeText={(text) => {
                                                 this.setState({ email: text });
                                                 const sessionCreateAccount = { email: text }
-                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                                this.setStorage(sessionCreateAccount);
                                             }}
                                         />
                                     </View>
@@ -708,7 +708,7 @@ export default class fluxoCadastro extends Component {
                                             onChangeText={(text) => {
                                                 this.setState({ email: text });
                                                 const sessionCreateAccount = { email: text }
-                                                this.setSessionCreateAccount(sessionCreateAccount);
+                                                this.setStorage(sessionCreateAccount);
                                             }}
                                         />
                                             <Text>

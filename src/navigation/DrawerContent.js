@@ -55,7 +55,11 @@ export default class DrawerContent extends Component {
                 <Drawer.Section>
                     <Appbar.Header style={{backgroundColor: '#2D363D'}} />
                 </Drawer.Section>
-                <DrawerContentScrollView>
+                <DrawerContentScrollView
+                    showsVerticalScrollIndicator ={false}
+                    showsHorizontalScrollIndicator={false}
+                    scrollEnabled={false}
+                >
                     <View style={styles.drawerContent}>
                         <View style={styles.userInfoSection}>
                             <View style={{flexDirection: 'row', marginTop: 15}}>
@@ -99,20 +103,6 @@ export default class DrawerContent extends Component {
                                     />
                                 )}
                                 label="Doações"
-                                labelStyle={styles.itemLabel}
-                                onPress={() => {}}
-                            />
-
-                            <DrawerItem
-                                style={styles.drawerItem}
-                                icon={() => (
-                                    <MtIcon
-                                        name="create"
-                                        size={30}
-                                        color="#2D363D"
-                                    />
-                                )}
-                                label="Criar Doação"
                                 labelStyle={styles.itemLabel}
                                 onPress={() => {}}
                             />

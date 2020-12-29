@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 
     drawerContent: {
         flex: 1,
-        height: windowHeight * 0.7
+        height: windowHeight
     },
 
     userInfoSection: {

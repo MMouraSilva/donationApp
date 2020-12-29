@@ -1,25 +1,101 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { Text, View, Pressable, ScrollView } from 'react-native';
+import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 import styles from './styles.js';
-import { container, content, Input, text } from '../../styles/index.js';
-import { Octicons as OcIcons, FontAwesome as FtIcons } from '@expo/vector-icons';
+import { container, content, titleView, title } from '../../styles/index.js';
+import { Octicons as OcIcons, FontAwesome as FtIcons, Ionicons as Ioicon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     Appbar,
 } from 'react-native-paper';
 
+const windowWidth = Dimensions.get('window').width;
+
 export default class telaInicial extends Component {
-    state = {
-        page: 'inicial',
-        categoria: 'Todos os equipamentos',
-        equipamento: []
+    function(props) {
+        const navigation = useNavigation();
+        return <MyBackButton {...props} navigation={navigation} />
     }
 
-    componentDidMount () {
+    state = {
+        categoria: 'Todos os equipamentos',
+        equipamento: [],
+        order: "DESC"
+    }
+
+    setStorage = async (value) => {
+        try {
+            await AsyncStorage.setItem('@order', value)
+        } catch (e) {
+            console.log("Deu erro: ", e);
+        }
+    }
+
+    getStorage = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@order')
+            return value != null ? value : null;
+        } catch(e) {
+            console.log("Deu erro:", e);
+        }
+    }
+
+    clearStorage = async () => {
+        try {
+            await AsyncStorage.clear()
+        } catch(e) {
+            console.log("Deu erro:", e);
+        }
+    }
+
+    orderSelect = async (order) => {
+        const { navigation } = this.props;
+        if(order == 'ASC') {
+            this.setStorage(order)
+            navigation.goBack();
+        }else if(order == 'DESC') {
+            this.setStorage(order)
+            navigation.goBack();
+        }
+    }
+
+    componentDidMount = async () => {
+        const { navigation } = this.props;
+        const { route } = this.props;
+        let page;
+
+        const order = await this.getStorage();
+
+        if(order != null) {
+            this.setState({ order });
+        }
+
+        if(route.params == null)
+        {
+            page = 'inicial';    
+        }else {
+            page = route.params.page;
+        }
+        if(page == 'ordenar') {
+            navigation.setOptions({
+                gestureEnabled: false
+            })
+        }
     }
 
     render () {
-        switch (this.state.page) {
+        let page;
+        const { navigation } = this.props;
+        const { route } = this.props;
+        if(route.params == null)
+        {
+            page = 'inicial';    
+        }else {
+            page = route.params.page;
+        }
+
+        switch (page) {
             case 'inicial':
                 return (
                     <View style={container}>
@@ -30,7 +106,7 @@ export default class telaInicial extends Component {
                         >
                             <StatusBar style="light" />
                             <Appbar.Header style={{backgroundColor: '#2D363D'}}>
-                                <Pressable onPress={this.props.navigation.openDrawer}>
+                                <Pressable onPress={ navigation.openDrawer }>
                                     <FtIcons name="reorder" style={styles.headerIcon}/>
                                 </Pressable>
                             </Appbar.Header>
@@ -39,7 +115,12 @@ export default class telaInicial extends Component {
                                     style={() => [
                                         styles.headerButton
                                     ]}
-                                    onPress={this._login}
+                                    onPress={() => {
+                                        navigation.push('DrawerNavigator', {
+                                            screen: 'telaInicial',
+                                            params: { page: 'ordenar' }
+                                        })
+                                    }}
                                     >
                                     <Text style={styles.headerText}>
                                         <OcIcons name="list-ordered" size={20} color="#FED500" />
@@ -101,8 +182,64 @@ export default class telaInicial extends Component {
     
             case 'ordenar':
                 return (
-                    <View>
-    
+                    <View style={container}>
+                            <Appbar.Header style={{backgroundColor: '#2D363D', width: windowWidth}}>
+                                <Pressable onPress={() => { navigation.goBack() }}>
+                                    <Ioicon name="md-arrow-back" style={styles.headerIcon} />
+                                </Pressable>
+                            </Appbar.Header>
+                        <ScrollView
+                            showsVerticalScrollIndicator ={false}
+                            showsHorizontalScrollIndicator={false}
+                            scrollEnabled={false}
+                        >
+                            <StatusBar style="light" />
+
+                            <View style={content}>
+                                <View style={titleView}>
+                                    <Text style={title}> Ordenar por </Text>
+                                    <Text style={styles.subTitle}> Atual:{" "}
+                                        {
+                                            this.state.order == "DESC" ? 
+                                            'Mais recentes' : 
+                                            this.state.order == "ASC" ?
+                                            'Mais antigos' : 'aa'
+                                        } 
+                                    </Text>
+                                </View>
+
+
+                                <View style={styles.orderView}>
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const order = "DESC"
+                                                this.orderSelect(order)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Mais recentes</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const order = "ASC"
+                                                this.orderSelect(order)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Mais antigos</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                </View>
+
+                            </View>
+                        </ScrollView>
                     </View>
                 )
         }
