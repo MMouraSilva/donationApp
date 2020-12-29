@@ -21,8 +21,13 @@ const styles = StyleSheet.create({
     },
 
     logoutLabel: {
-        color: "#fff",
-        fontWeight: "bold",
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+
+    itemLabel: {
+        color: '#2D363D',
+        fontWeight: 'bold',
     },
 
     title: {

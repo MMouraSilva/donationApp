@@ -106,7 +106,15 @@ export default class fluxoCadastro extends Component {
     }
 
     _criarConta = async () => {
-        let userEmail = this.state.email;
+        
+        const sessionCreateAccount = await this.getSessionCreateAccount();
+
+        let { day, month, year } = await sessionCreateAccount;
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth() + 1;
+        let currentDay = new Date().getDate();
+
+        let userEmail = this.state.email.trim();
         if(this.state.type_user == 'r' && this.state.email.match(/@/)) {
             Alert.alert('E-mail Invalido', 'A criação deste tipo de conta é permitida apenas com o e-mail institucional.');
             return;
@@ -121,8 +129,21 @@ export default class fluxoCadastro extends Component {
             return;
         }
         if(this.state.type_user == 'r') {
-            userEmail = this.state.email + '@aluno.ifsp.edu.br';
-            this.setState({ email: userEmail});
+            userEmail = userEmail + '@aluno.ifsp.edu.br';
+        }
+        if(this.state.type_user == 'd' && currentYear - year == 18) {
+            if(currentMonth == month) {
+                if(currentDay < day) {
+                    Alert.alert('Erro', 'O Doador deve ser maior de idade');
+                    return;
+                }
+            } else if(currentMonth < month) {
+                Alert.alert('Erro', 'O Doador deve ser maior de idade');
+                return;
+            }
+        }else if(this.state.type_user == 'd' && currentYear - year < 18) {
+            Alert.alert('Erro', 'O Doador deve ser maior de idade');
+            return;
         }
 
         const { navigation } = this.props;
@@ -292,6 +313,9 @@ export default class fluxoCadastro extends Component {
         const { type_user } = this.state;
         const { route } = this.props;
         const page = route.params.page;
+        const day = new Date().getDate();
+        const month = new Date().getMonth();
+        const year = new Date().getFullYear();
 
         switch (page) {
             case 'cadastroPasso1':
@@ -336,9 +360,11 @@ export default class fluxoCadastro extends Component {
                                         <DateTimePickerModal
                                             isVisible={this.state.isDatePickerVisible}
                                             mode="date"
+                                            maximumDate={new Date(year, month, day)}
+                                            minimumDate={new Date(1920, 0, 1)}
                                             onConfirm={(date) => {
                                                 const fullDate = date.getDate() + ("-") + (date.getMonth() + 1) + ("-") + date.getFullYear();
-                                                const sessionCreateAccount = { date_of_birth: fullDate }
+                                                const sessionCreateAccount = { date_of_birth: fullDate, day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() }
                                                 this.setState({ 
                                                     date_of_birth: fullDate,
                                                     isDatePickerVisible: false,
