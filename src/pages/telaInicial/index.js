@@ -4,6 +4,9 @@ import { Text, View, Pressable, ScrollView } from 'react-native';
 import styles from './styles.js';
 import { container, content, Input, text } from '../../styles/index.js';
 import { Octicons as OcIcons, FontAwesome as FtIcons } from '@expo/vector-icons';
+import {
+    Appbar,
+} from 'react-native-paper';
 
 export default class telaInicial extends Component {
     state = {
@@ -26,11 +29,11 @@ export default class telaInicial extends Component {
                             scrollEnabled={false}
                         >
                             <StatusBar style="light" />
-                            <View style={styles.header}>
+                            <Appbar.Header style={{backgroundColor: '#2D363D'}}>
                                 <Pressable onPress={this.props.navigation.openDrawer}>
                                     <FtIcons name="reorder" style={styles.headerIcon}/>
                                 </Pressable>
-                            </View>
+                            </Appbar.Header>
                             <View style={styles.subHeader}>
                                 <Pressable
                                     style={() => [

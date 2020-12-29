@@ -21,6 +21,15 @@ export default class Login extends Component {
         iconName: "eye"
     }
 
+    setSessionCreateAccount = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.mergeItem('@sessionAccount', jsonValue)
+        } catch (e) {
+            console.log("Deu erro: ", e);
+        }
+    }
+
     clearSessionCreateAccount = async () => {
         try {
             await AsyncStorage.clear()
@@ -65,6 +74,8 @@ export default class Login extends Component {
             }
 
             const session = await userService.login(loginForms);
+
+            this.setSessionCreateAccount(session.data);
 
             navigation.reset({
                 index: 0,

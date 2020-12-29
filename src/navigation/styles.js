@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
 
@@ -10,17 +12,40 @@ const styles = StyleSheet.create({
     },
 
     drawerContent: {
-        flex: 1
+        flex: 1,
+        height: windowHeight * 0.7
     },
 
     userInfoSection: {
-        paddingLeft: 20
+        paddingLeft: '10%'
     },
 
-    label: {
+    logoutLabel: {
         color: "#fff",
         fontWeight: "bold",
-    }
+    },
+
+    title: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginTop: '-5%'
+    },
+
+    caption: {
+        fontSize: 14,
+        marginTop: '5%'
+    },
+
+    drawerItem: {
+        borderColor: '#FED500',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        width: '75%',
+        height: '18%',
+        marginBottom: '-1.69%',
+        marginLeft: '10%',
+        justifyContent: 'center',
+    },
 
 })
 

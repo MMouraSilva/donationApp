@@ -3,15 +3,9 @@ import { StyleSheet, Dimensions } from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
-    header: {
-        height: "40%",
-        backgroundColor: "#2D363D",
-    },
-
     headerIcon: {
         color: "#fff",
         fontSize: 30,
-        marginTop: 50,
         marginLeft: 20
     },
     
