@@ -48,11 +48,12 @@ const styles = StyleSheet.create({
     text: {
         marginTop: "9%",
         marginLeft: "9.5%",
-        fontSize: 11
+        fontSize: 12
     },
 
     textCategoria: {
-        marginLeft: "9.5%",
+        marginLeft: "10.5%",
+        marginTop: '-1%',
         fontWeight: 'bold'
     },
 

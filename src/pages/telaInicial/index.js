@@ -21,20 +21,21 @@ export default class telaInicial extends Component {
     state = {
         categoria: 'Todos os equipamentos',
         equipamento: [],
-        order: "DESC"
+        order: "DESC",
+        filter: "todos"
     }
 
-    setStorage = async (value) => {
+    setStorage = async (value, key) => {
         try {
-            await AsyncStorage.setItem('@order', value)
+            await AsyncStorage.setItem(key, value)
         } catch (e) {
             console.log("Deu erro: ", e);
         }
     }
 
-    getStorage = async () => {
+    getStorage = async (key) => {
         try {
-            const value = await AsyncStorage.getItem('@order')
+            const value = await AsyncStorage.getItem(key)
             return value != null ? value : null;
         } catch(e) {
             console.log("Deu erro:", e);
@@ -50,14 +51,62 @@ export default class telaInicial extends Component {
     }
 
     orderSelect = async (order) => {
+        const key = '@order';
         const { navigation } = this.props;
         if(order == 'ASC') {
-            this.setStorage(order)
+            this.setStorage(order, key)
             navigation.goBack();
         }else if(order == 'DESC') {
-            this.setStorage(order)
+            this.setStorage(order, key)
             navigation.goBack();
         }
+    }
+
+    filterSelect = async (filter) => {
+        const key = '@filter';
+        const { navigation } = this.props;
+        const { route } = this.props;
+        if(filter == 'todos') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'notebooks') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'monitores') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'teclados') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'pecasComputador') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'pecasNotebook') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'fones') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'headsets') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }else if(filter == 'microfones') {
+            this.setStorage(filter, key)
+            route.params.onGoBack(filter);
+            navigation.goBack();
+        }
+    }
+
+    refresh = async (data) => {
+        this.setState({ filter: data });
     }
 
     componentDidMount = async () => {
@@ -65,10 +114,17 @@ export default class telaInicial extends Component {
         const { route } = this.props;
         let page;
 
-        const order = await this.getStorage();
+        const orderKey = '@order';
+        const filterKey = '@filter';
+        const order = await this.getStorage(orderKey);
+        const filter = await this.getStorage(filterKey);
 
         if(order != null) {
             this.setState({ order });
+        }
+
+        if(filter != null) {
+            this.setState({ filter });
         }
 
         if(route.params == null)
@@ -88,6 +144,7 @@ export default class telaInicial extends Component {
         let page;
         const { navigation } = this.props;
         const { route } = this.props;
+
         if(route.params == null)
         {
             page = 'inicial';    
@@ -135,7 +192,15 @@ export default class telaInicial extends Component {
                                             borderLeftColor: '#21282e'
                                         }
                                     ]}
-                                    onPress={this._login}
+                                    onPress={() => {
+                                        navigation.push('DrawerNavigator', {
+                                            screen: 'telaInicial',
+                                            params: { 
+                                                page: 'categorias' ,
+                                                onGoBack: this.refresh
+                                            }
+                                        })
+                                    }}
                                 >
                                     <Text style={styles.headerText}> 
                                         <OcIcons name="list-unordered" size={20} color='#FED500' />
@@ -145,7 +210,28 @@ export default class telaInicial extends Component {
                             </View>
                             <View style={content}>
                                 <Text style={styles.text}> Visualizando a categoria </Text>
-                                <Text style={styles.textCategoria}> {this.state.categoria} </Text>
+                                <Text style={styles.textCategoria}> 
+                                    {
+                                        this.state.filter == "todos" ? 
+                                        'Todos os equipamentos' : 
+                                        this.state.filter == "notebooks" ? 
+                                        'Notebooks' :
+                                        this.state.filter == "monitores" ? 
+                                        'Monitores' :
+                                        this.state.filter == "teclados" ? 
+                                        'Teclados' :
+                                        this.state.filter == "pecasComputador" ? 
+                                        'Peças de computador' :
+                                        this.state.filter == "pecasNotebook" ? 
+                                        'Peças de notabook' :
+                                        this.state.filter == "fones" ? 
+                                        'Fones de ouvido' :
+                                        this.state.filter == "headsets" ? 
+                                        'Headsets' :
+                                        this.state.filter == "microfones" ? 
+                                        'Microfones' : ''
+                                    }
+                                </Text>
                                 
                                 <ScrollView
                                     style={styles.scrollView}
@@ -179,7 +265,172 @@ export default class telaInicial extends Component {
                     </View>
                 )
             case 'categorias':
-    
+                return (
+                    <View style={container}>
+                            <Appbar.Header style={{backgroundColor: '#2D363D', width: windowWidth}}>
+                                <Pressable onPress={() => { navigation.goBack() }}>
+                                    <Ioicon name="md-arrow-back" style={styles.headerIcon} />
+                                </Pressable>
+                            </Appbar.Header>
+                        <ScrollView
+                            showsVerticalScrollIndicator ={false}
+                            showsHorizontalScrollIndicator={false}
+                            scrollEnabled={false}
+                        >
+                            <StatusBar style="light" />
+
+                            <View style={content}>
+                                <View style={titleView}>
+                                    <Text style={title}> Catagorias </Text>
+                                    <Text style={styles.subTitle}> Atual:{" "}
+                                        {
+                                            this.state.filter == "todos" ? 
+                                            'Todos os equipamentos' : 
+                                            this.state.filter == "notebooks" ? 
+                                            'Notebooks' :
+                                            this.state.filter == "monitores" ? 
+                                            'Monitores' :
+                                            this.state.filter == "teclados" ? 
+                                            'Teclados' :
+                                            this.state.filter == "pecasComputador" ? 
+                                            'Peças de computador' :
+                                            this.state.filter == "pecasNotebook" ? 
+                                            'Peças de notabook' :
+                                            this.state.filter == "fones" ? 
+                                            'Fones de ouvido' :
+                                            this.state.filter == "headsets" ? 
+                                            'Headsets' :
+                                            this.state.filter == "microfones" ? 
+                                            'Microfones' : ''
+                                        } 
+                                    </Text>
+                                </View>
+
+                                <View style={styles.orderView}>
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "todos"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Todos os equipamentos</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "notebooks"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Notebooks</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "monitores"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Monitores</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "teclados"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Teclados</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "pecasComputador"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Peças de computador</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "pecasNotebook"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Peças de notebook</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "fones"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Fones de ouvido</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "headsets"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Headsets</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                    <View style={styles.orderContent}>
+                                        <Pressable
+                                            style={styles.orderButton}
+                                            onPress={() => {
+                                                const filter = "microfones"
+                                                this.filterSelect(filter)
+                                            }}
+                                        >
+                                            <Text style={styles.orderText}>Microfones</Text>
+                                            <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                        </Pressable>
+                                    </View>
+
+                                </View>
+
+                            </View>
+                        </ScrollView>
+                    </View>
+                )
+
             case 'ordenar':
                 return (
                     <View style={container}>
@@ -203,11 +454,10 @@ export default class telaInicial extends Component {
                                             this.state.order == "DESC" ? 
                                             'Mais recentes' : 
                                             this.state.order == "ASC" ?
-                                            'Mais antigos' : 'aa'
+                                            'Mais antigos' : ''
                                         } 
                                     </Text>
                                 </View>
-
 
                                 <View style={styles.orderView}>
                                     <View style={styles.orderContent}>
