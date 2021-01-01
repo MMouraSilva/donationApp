@@ -1,8 +1,6 @@
 const axios = require('axios');
 const {urlApi} = require('./../../environment');
 
-console.log(urlApi)
-
 exports.login =  (user) => {
   try{
     return axios.post(`${urlApi}/user/login`,user);
@@ -53,7 +51,7 @@ exports.updateUser = async (user) => {
 
 exports.deleteUser = async (userId) => {
   try{
-    return axios.post(`${urlApi}/user/${userId}`);
+    return axios.delete(`${urlApi}/user/${userId}`);
   }
   catch(e){
     console.log(e)
