@@ -7,7 +7,7 @@ import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createStackNavigator();
 
-export default class Navigation extends Component {
+export default class StackNavigator extends Component {
 
     render(){
         return(

@@ -2,17 +2,16 @@ import React, { Component } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import telaInicial from '../pages/telaInicial';
 import DrawerContent from './DrawerContent';
+import TabStackNavigator from './TabStackNavigator';
 
 const Drawer = createDrawerNavigator();
 
-export default class inicialMenu extends Component {
-    render(){
+export default class DrawerNavigator extends Component {
+    render() {
         return(
                 <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="telaInicial">
-                    <Drawer.Screen 
-                        name="telaInicial" 
-                        component={telaInicial}
-                    />
+                    <Drawer.Screen name="telaInicial" component={telaInicial} />
+                    <Drawer.Screen name="TabStackNavigator" component={TabStackNavigator}/>
                 </Drawer.Navigator>
         );
     }

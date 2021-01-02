@@ -90,7 +90,12 @@ export default class DrawerContent extends Component {
                                 )}
                                 label="Início"
                                 labelStyle={styles.itemLabel}
-                                onPress={() => {}}
+                                onPress={() => {
+                                    navigation.reset({
+                                        index: 0,
+                                        routes: [{ name: 'telaInicial' }],
+                                    });
+                                }}
                             />
 
                             <DrawerItem
@@ -104,7 +109,14 @@ export default class DrawerContent extends Component {
                                 )}
                                 label="Doações"
                                 labelStyle={styles.itemLabel}
-                                onPress={() => {}}
+                                onPress={() => {
+                                    navigation.navigate('DrawerNavigator', {
+                                        screen: 'TabStackNavigator',
+                                        params: { 
+                                            page: ''
+                                        }
+                                    })
+                                }}
                             />
 
                             <DrawerItem

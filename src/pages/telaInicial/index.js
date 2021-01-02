@@ -133,7 +133,7 @@ export default class telaInicial extends Component {
         }else {
             page = route.params.page;
         }
-        if(page == 'ordenar') {
+        if(page == 'ordenar' || page == 'categorias') {
             navigation.setOptions({
                 gestureEnabled: false
             })
