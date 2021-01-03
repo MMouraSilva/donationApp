@@ -16,10 +16,12 @@ exports.getDonations = async () => {
  */
 exports.createDonation = async (donation) => {
   try{
-    return axios.post(`${urlApi}/donation`,donation);
+    const response = await axios.post(`${urlApi}/donation`, donation);
+    return response;
   }
   catch(e){
     console.log(e)
+    return null;
   }
 }
 
