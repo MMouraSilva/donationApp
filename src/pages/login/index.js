@@ -32,7 +32,7 @@ export default class Login extends Component {
 
     clearStorage = async () => {
         try {
-            await AsyncStorage.clear()
+            await AsyncStorage.removeItem('@sessionCreateAccount')
         } catch(e) {
             console.log("Deu erro:", e);
         }
@@ -74,8 +74,8 @@ export default class Login extends Component {
             }
 
             const session = await userService.login(loginForms);
-
-            this.setStorage(session.data);
+            const fullSession = await userService.getUserById(session.data.id);
+            this.setStorage(fullSession.data);
 
             navigation.reset({
                 index: 0,

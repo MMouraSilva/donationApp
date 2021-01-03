@@ -14,12 +14,16 @@ export default class StackNavigator extends Component {
     }
 
     render(){
+        let typeUser;
         const { navigation } = this.props;
+        const { route } = this.props;
+        typeUser = route.params.typeUser;
         return(
                 <Stack.Navigator initialRouteName="TabNavigator">
                     <Stack.Screen 
                         name="TabNavigator" 
                         component={TabNavigator}
+                        initialParams={{ typeUser: typeUser }}
                         options={{ 
                             title: '',
                             headerStyle: {

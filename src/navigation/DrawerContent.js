@@ -23,9 +23,10 @@ export default class DrawerContent extends Component {
     state = {
         id: null,
         name: null,
+        typeUser: null
     }
     
-    getSessionCreateAccount = async () => {
+    getStorage = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('@sessionAccount')
             return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -33,19 +34,19 @@ export default class DrawerContent extends Component {
             console.log("Deu erro:", e);
         }
     }
-    
-    clearSessionCreateAccount = async () => {
+
+    clearStorage = async () => {
         try {
-            await AsyncStorage.clear()
+            await AsyncStorage.removeItem('@sessionAccount')
         } catch(e) {
             console.log("Deu erro:", e);
         }
     }
 
     componentDidMount = async () => {
-        const sessionAccount = await this.getSessionCreateAccount();
-        let { name, id } = await sessionAccount;
-        this.setState({ name, id });
+        const sessionAccount = await this.getStorage();
+        let { name, id, typeUser } = await sessionAccount;
+        this.setState({ name, id, typeUser });
     }
     
     render() {
@@ -113,7 +114,7 @@ export default class DrawerContent extends Component {
                                     navigation.navigate('DrawerNavigator', {
                                         screen: 'TabStackNavigator',
                                         params: { 
-                                            page: ''
+                                            typeUser: this.state.typeUser
                                         }
                                     })
                                 }}
@@ -130,7 +131,14 @@ export default class DrawerContent extends Component {
                                 )}
                                 label="Perfil"
                                 labelStyle={styles.itemLabel}
-                                onPress={() => {}}
+                                onPress={() => {
+                                    navigation.navigate('DrawerNavigator', {
+                                        screen: 'fluxoPerfil',
+                                        params: { 
+                                            page: 'perfil'
+                                        }
+                                    })
+                                }}
                             />
 
                         </Drawer.Section>
@@ -148,7 +156,7 @@ export default class DrawerContent extends Component {
                         label="Sair da minha conta"
                         labelStyle={styles.logoutLabel}
                         onPress={() => {
-                            this.clearSessionCreateAccount();
+                            this.clearStorage();
 
                             navigation.reset({
                                 index: 0,

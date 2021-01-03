@@ -68,7 +68,7 @@ export default class fluxoCadastro extends Component {
 
     clearStorage = async () => {
         try {
-            await AsyncStorage.clear()
+            await AsyncStorage.removeItem('@sessionCreateAccount')
         } catch(e) {
             console.log("Deu erro:", e);
         }

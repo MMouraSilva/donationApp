@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 import styles from './styles.js';
-import { container, content, titleView, title } from '../../styles/index.js';
+import { container, content, titleView, title, icon } from '../../styles/index.js';
 import { Octicons as OcIcons, FontAwesome as FtIcons, Ionicons as Ioicon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +19,6 @@ export default class telaInicial extends Component {
     }
 
     state = {
-        categoria: 'Todos os equipamentos',
         equipamento: [],
         order: "DESC",
         filter: "todos"
@@ -37,14 +36,6 @@ export default class telaInicial extends Component {
         try {
             const value = await AsyncStorage.getItem(key)
             return value != null ? value : null;
-        } catch(e) {
-            console.log("Deu erro:", e);
-        }
-    }
-
-    clearStorage = async () => {
-        try {
-            await AsyncStorage.clear()
         } catch(e) {
             console.log("Deu erro:", e);
         }
@@ -164,7 +155,7 @@ export default class telaInicial extends Component {
                             <StatusBar style="light" />
                             <Appbar.Header style={{backgroundColor: '#2D363D'}}>
                                 <Pressable onPress={ navigation.openDrawer }>
-                                    <FtIcons name="reorder" style={styles.headerIcon}/>
+                                    <FtIcons name="reorder" style={icon.headerIcon}/>
                                 </Pressable>
                             </Appbar.Header>
                             <View style={styles.subHeader}>
@@ -269,7 +260,7 @@ export default class telaInicial extends Component {
                     <View style={container}>
                             <Appbar.Header style={{backgroundColor: '#2D363D', width: windowWidth}}>
                                 <Pressable onPress={() => { navigation.goBack() }}>
-                                    <Ioicon name="md-arrow-back" style={styles.headerIcon} />
+                                    <Ioicon name="md-arrow-back" style={icon.headerIcon} />
                                 </Pressable>
                             </Appbar.Header>
                         <ScrollView
@@ -436,7 +427,7 @@ export default class telaInicial extends Component {
                     <View style={container}>
                             <Appbar.Header style={{backgroundColor: '#2D363D', width: windowWidth}}>
                                 <Pressable onPress={() => { navigation.goBack() }}>
-                                    <Ioicon name="md-arrow-back" style={styles.headerIcon} />
+                                    <Ioicon name="md-arrow-back" style={icon.headerIcon} />
                                 </Pressable>
                             </Appbar.Header>
                         <ScrollView
