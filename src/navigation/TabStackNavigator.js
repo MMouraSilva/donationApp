@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Pressable } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator from './TabNavigator';
+//import formEquips from './../pages/formEquipamentos';
 import { FontAwesome as FtIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 

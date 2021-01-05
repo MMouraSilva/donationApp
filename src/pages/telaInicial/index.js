@@ -1,11 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 import styles from './styles.js';
-import { container, content, titleView, title, icon } from '../../styles/index.js';
+import { container, content, titleView, title, icon, equipamentsCard } from '../../styles/index.js';
 import { Octicons as OcIcons, FontAwesome as FtIcons, Ionicons as Ioicon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import donationService  from './../../service/donationService';
+import userService from './../../service/userService.js';
 import {
     Appbar,
 } from 'react-native-paper';
@@ -19,9 +21,9 @@ export default class telaInicial extends Component {
     }
 
     state = {
-        equipamento: [],
+        equipamentos: [],
         order: "DESC",
-        filter: "todos"
+        filter: "todos",
     }
 
     setStorage = async (value, key) => {
@@ -105,6 +107,15 @@ export default class telaInicial extends Component {
         const { route } = this.props;
         let page;
 
+        if(this.state.equipamentos.length == 0) {
+            const equipamentos = await donationService.getDonations();
+            for (let equipObject of equipamentos.data) {
+                const user = await userService.getUserById(equipObject.donorId);
+                equipObject.donorName = user.data.name;
+            }
+            this.setState({ equipamentos: equipamentos.data });
+        }
+
         const orderKey = '@order';
         const filterKey = '@filter';
         const order = await this.getStorage(orderKey);
@@ -146,60 +157,56 @@ export default class telaInicial extends Component {
         switch (page) {
             case 'inicial':
                 return (
-                    <View style={container}>
-                        <ScrollView
-                            showsVerticalScrollIndicator ={false}
-                            showsHorizontalScrollIndicator={false}
-                            scrollEnabled={false}
-                        >
-                            <StatusBar style="light" />
-                            <Appbar.Header style={{backgroundColor: '#2D363D'}}>
-                                <Pressable onPress={ navigation.openDrawer }>
-                                    <FtIcons name="reorder" style={icon.headerIcon}/>
-                                </Pressable>
-                            </Appbar.Header>
-                            <View style={styles.subHeader}>
-                                <Pressable
-                                    style={() => [
-                                        styles.headerButton
-                                    ]}
-                                    onPress={() => {
-                                        navigation.push('DrawerNavigator', {
-                                            screen: 'telaInicial',
-                                            params: { page: 'ordenar' }
-                                        })
-                                    }}
-                                    >
-                                    <Text style={styles.headerText}>
-                                        <OcIcons name="list-ordered" size={20} color="#FED500" />
-                                        {"   "}Ordenar
-                                    </Text>
-                                </Pressable>
-                                <Pressable
-                                    style={() => [
-                                        styles.headerButton,
-                                        {
-                                            borderLeftWidth: 1,
-                                            borderLeftColor: '#21282e'
-                                        }
-                                    ]}
-                                    onPress={() => {
-                                        navigation.push('DrawerNavigator', {
-                                            screen: 'telaInicial',
-                                            params: { 
-                                                page: 'categorias' ,
-                                                onGoBack: this.refresh
-                                            }
-                                        })
-                                    }}
+                    <View style={equipamentsCard.container}>
+                        <Appbar.Header style={styles.header}>
+                            <Pressable onPress={ navigation.openDrawer }>
+                                <FtIcons name="reorder" style={styles.headerIcon}/>
+                            </Pressable>
+                        </Appbar.Header>
+                        <Appbar.Header style={styles.subHeader}>
+                            <Pressable
+                                style={() => [
+                                    styles.headerButton
+                                ]}
+                                onPress={() => {
+                                    navigation.push('DrawerNavigator', {
+                                        screen: 'telaInicial',
+                                        params: { page: 'ordenar' }
+                                    })
+                                }}
                                 >
-                                    <Text style={styles.headerText}> 
-                                        <OcIcons name="list-unordered" size={20} color='#FED500' />
-                                        {"   "}Categorias 
-                                    </Text>
-                                </Pressable>
-                            </View>
-                            <View style={content}>
+                                <Text style={styles.headerText}>
+                                    <OcIcons name="list-ordered" size={20} color="#FED500" />
+                                    {"   "}Ordenar
+                                </Text>
+                            </Pressable>
+                            <Pressable
+                                style={() => [
+                                    styles.headerButton,
+                                    {
+                                        borderLeftWidth: 1,
+                                        borderLeftColor: '#21282e'
+                                    }
+                                ]}
+                                onPress={() => {
+                                    navigation.push('DrawerNavigator', {
+                                        screen: 'telaInicial',
+                                        params: { 
+                                            page: 'categorias' ,
+                                            onGoBack: this.refresh
+                                        }
+                                    })
+                                }}
+                                >
+                                <Text style={styles.headerText}> 
+                                    <OcIcons name="list-unordered" size={20} color='#FED500' />
+                                    {"   "}Categorias 
+                                </Text>
+                            </Pressable>
+                        </Appbar.Header>
+                        <ScrollView style={{ backgroundColor: "#f2f2f2" }}>
+                            <StatusBar style="light" />
+                            <View style={equipamentsCard.content}>
                                 <Text style={styles.text}> Visualizando a categoria </Text>
                                 <Text style={styles.textCategoria}> 
                                     {
@@ -225,30 +232,39 @@ export default class telaInicial extends Component {
                                 </Text>
                                 
                                 <ScrollView
-                                    style={styles.scrollView}
+                                    style={equipamentsCard.scrollView}
                                     vertical
                                 >
-                                    <View style={styles.scrollViewContainer}>
-                                        {/*{
+                                    <View style={equipamentsCard.scrollViewContainer}>
+                                        {
                                             this.state.equipamentos.map(equip => 
-                                        <Pressable
-                                        style={({ pressed }) => [
-                                            {
-                                                backgroundColor: pressed
-                                                ? onPressedColor
-                                                : pressableColor
-                                            },
-                                            buttonColor
-                                        ]}
-                                            key={equip.id}
-                                            onPress={() => alert('Pressionado')}
-                                        >
-                                            <Text style={textColor}>
-                                            {equip.name}
-                                            </Text>
-                                            </Pressable>
+                                                <Pressable
+                                                    style={({ pressed }) => [
+                                                        {
+                                                            backgroundColor: pressed
+                                                            ? "#43515C"
+                                                            : "#fff"
+                                                        },
+                                                        equipamentsCard.equipsCard
+                                                    ]}
+                                                    key={equip.id}
+                                                    onPress={() => alert(equip.name)}
+                                                >
+                                                    <View style={equipamentsCard.view}>
+                                                        <Text style={equipamentsCard.equipName}>
+                                                            {equip.name}
+                                                        </Text>
+                                                        <Text style={equipamentsCard.donorName}>
+                                                            Doado por {equip.donorName}
+                                                        </Text>
+                                                        <View style={equipamentsCard.line}/>
+                                                        <Text style={equipamentsCard.equipDescription}>
+                                                            {equip.equipmentDescription}
+                                                        </Text>
+                                                    </View>
+                                                </Pressable>
                                             )
-                                        }  exibição dos equipamentos disponiveis*/}
+                                        }
                                     </View>
                                 </ScrollView>
                             </View>

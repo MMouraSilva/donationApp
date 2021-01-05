@@ -11,7 +11,6 @@ import {
     Avatar,
     Title,
     Caption,
-    Drawer,
     Text,
     Appbar,
 } from 'react-native-paper';

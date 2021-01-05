@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
 
@@ -32,8 +34,10 @@ const styles = StyleSheet.create({
         right: 0
     },
 
-    scrollView: {
-    }
+    titleView: {
+        marginLeft: "10%",
+        marginBottom: "2%"
+    },
 })
 
 

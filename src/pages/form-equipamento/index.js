@@ -1,11 +1,22 @@
+import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { Text, View, Pressable, Button , TextInput, Alert, ScrollView, Switch } from 'react-native';
+import { Text, View, Pressable, TextInput, Alert, ScrollView } from 'react-native';
+import { container, title, content, Input, button, icon, titleView } from './../../styles/index';
+import styles from './styles.js';
 import { Picker } from '@react-native-community/picker';
 import categoryService from './../../service/categoryService';
 import donationService  from './../../service/donationService';
-import userService  from './../../service/userService';
+import { AntDesign as AntIcons } from '@expo/vector-icons';
+import CheckBox from '@react-native-community/checkbox';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class formEquips extends Component {
+
+  function(props) {
+    const navigation = useNavigation();
+    return <MyBackButton {...props} navigation={navigation} />
+  }
 
   state = {
     donation : {
@@ -26,6 +37,16 @@ export default class formEquips extends Component {
     user : {}
   }
 
+  getStorage = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('@sessionAccount')
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+        console.log("Deu erro:", e);
+    }
+}
+
+
   componentDidMount = async () => {
     if(this.state.categorys.length == 0){
       const response = await categoryService.getAllCategory();
@@ -33,9 +54,8 @@ export default class formEquips extends Component {
       this.setState({ categorys:this.state.categorys});
     }
     if(this.state.user.name == undefined){
-      const userId = 'c5e31b6e-754c-4644-ae9d-e1797e820629';
-      const response = await userService.getUserById(userId);
-      const user = response.data;
+      const response = await this.getStorage();
+      const user = response;
       this.setState({user})
     }
   }
@@ -66,7 +86,6 @@ export default class formEquips extends Component {
   }
 
   isValidAddress(){
-    console.log('>>> this.state.user',this.state.user);
     return this.state.user.number && this.state.user.address;
   }
   
@@ -78,91 +97,113 @@ export default class formEquips extends Component {
 
   
   async createEquip(){
-
+    const { navigation } = this.props;
     const donation = this.state.donation;
     // pegar o id do usuario logado e colocar na propriedade do donation.donorId
-    donation.donorId = 'c5e31b6e-754c-4644-ae9d-e1797e820629'
+    donation.donorId = this.state.user.id;
     const response = await donationService.createDonation(donation);
     if(!response){
       // exibir para o usuario que houve um erro e voltar para a lista de equipamentos
+      Alert.alert("Erro", "Não foi possível criar a doação.");
+      navigation.goBack();
     }
-
     // navegar pra a lista de equipamentos
-
+    navigation.goBack();
   }
 
-  updateEquip(){
+  async updateEquip(){
+    const { navigation } = this.props;
     const response = await donationService.updateDonation(donation);
     if(!response){
       // exibir para o usuario que houve um erro e voltar para a lista de equipamentos
+      Alert.alert("Erro", "Não foi possível atualizar a doação.");
+      navigation.goBack();
     }
-
-    // navegar pra a lista de equipamentos
+    navigation.goBack();
   }
 
   render() {
+    return (
+      <View style={container}>
+        <ScrollView
+          showsVerticalScrollIndicator ={false}
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={false}
+        >
+          <StatusBar style="light" />
 
+          <View style={content}>
+            <View style={titleView}>
+              <Text style={title}> Doe um equipamento para a {"\n"} comunidade </Text>
+            </View>
 
-    return (<View >
-      <Text style={{paddingBottom:20}}>
-        Doe um equipamento para a comunidade
-      </Text>
+            <View style={styles.inputField}>
+              <Text style={Input.inputFieldText}> Título do equipamento </Text>
+              <View style={Input.inputView}>
+                <TextInput 
+                  style={Input.input}
+                  onChangeText={(name) =>this.setName(name)}
+                  autoCapitalize='none'
+                />
+              </View>
 
+              <Text style={Input.inputFieldText}> Descrição do Equipamento </Text>
+              <View style={styles.descriptionView}>
+                <TextInput 
+                  style={styles.descriptionInput}
+                  onChangeText = {(equipmentDescription) => this.setDescription(equipmentDescription)}
+                  autoCapitalize = 'none'
+                  multiline={true}
+                />
+              </View>
 
-      <View style={{paddingBottom:20}}>
-        <Text > Título do equipamento </Text>
-        <TextInput 
-      
-            style={{ borderBottomWidth: 1,
-              borderBottomColor: '#000',}}
-            placeholder="digite ..."
-            onChangeText = {(name) =>this.setName(name)}
-            autoCapitalize = 'none'
-        />
+              <Text style={Input.inputFieldText}> Categoria </Text>
+              <View style={styles.categoriaView}>
+                <Picker
+                  selectedValue={this.state.categorySelected}
+                  style={Input.input}
+                  onValueChange={(itemValue, itemIndex) => this.setCategory(itemValue)}
+                >
+                {this.getCategoryAll()}
+              </Picker>
+              
+              </View>
+
+              {
+                this.isValidAddress() ? (
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <CheckBox
+                    disabled={false}
+                    value={this.state.donation.allowWithdrawalAddress}
+                    onValueChange={(value)=>this.setAllowWithdrawalAddress(value)}
+                  />
+                  <Text>
+                    Permitir retirada no meu endereço
+                  </Text>
+                </View>
+                ) : (<></>)
+              }
+              
+              <Pressable 
+                style={({ pressed }) => [
+                  {
+                      backgroundColor: pressed
+                      ? '#43515c'
+                      : '#2D363D'
+                  },
+                  styles.button
+                ]}
+                onPress={()=>{this.createEquip()}}
+              >
+                <Text style={button.text}> 
+                <AntIcons name="plus" style={icon.nextIcon} />
+                  {"   "}Doar equipamento 
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </ScrollView>
       </View>
-      <View style={{paddingBottom:20}}>
-        <Text > Descrição do Equipamento </Text>
-        <TextInput 
-      
-            style={{ borderBottomWidth: 1,
-              borderBottomColor: '#000',}}
-            placeholder="digite ..."
-            onChangeText = {(equipmentDescription) => this.setDescription(equipmentDescription)}
-            autoCapitalize = 'none'
-        />
-      </View>
-      <View style={{paddingBottom:20}}>
-        <Text > Categoria </Text>
-        <Picker
-        selectedValue={this.state.categorySelected}
-        style={{ height: 50 }}
-        onValueChange={(itemValue, itemIndex) => this.setCategory(itemValue)}
-      >
-        {this.getCategoryAll()}
-      </Picker>
-       
-      </View>
-
-      {
-        this.isValidAddress() ? (<Text style={{paddingBottom:20}}>
-          <Switch
-                onValueChange={(value)=>this.setAllowWithdrawalAddress(value)}
-                value={this.state.donation.allowWithdrawalAddress}
-            />
-            Permitir retirada no meu endereço
-        </Text>) : (<></>)
-      }
-      
-      <Button 
-        style={{paddingBottom:20}}
-        title="Doar equipamento"
-        onPress={()=>{this.createEquip()}}
-      >
-      </Button>
-      
-
-    </View>)
-
+    );
   }
-
 }

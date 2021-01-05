@@ -742,7 +742,7 @@ export default class fluxoCadastro extends Component {
                                             disabled={false}
                                             value={this.state.toggleCheckBox}
                                             onValueChange={(newValue) => this.setState({ toggleCheckBox: newValue })}
-                                            />
+                                        />
                                         <Text style={styles.checkBoxText}>
                                             Li e concordo com os termos de uso {"\n"} e privacidade
                                         </Text>

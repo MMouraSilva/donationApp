@@ -7,5 +7,6 @@ import button from './button.js';
 import icon from './icon.js';
 import header from './header.js';
 import titleView from './titleView.js';
+import equipamentsCard from './equipamentsCard.js';
 
-export { container, content, title, Input, text, button, icon, header, titleView };
+export { container, content, title, Input, text, button, icon, header, titleView, equipamentsCard };

@@ -1,15 +1,28 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+    header: {
+        width: windowWidth,
+        backgroundColor: '#2D363D',
+        height: windowHeight * 0.05
+    },
+    
     subHeader: {
         width: windowWidth,
-        height: "25%",
         backgroundColor: '#2D363D',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+    },
+
+    headerIcon: {
+        color: "#fff",
+        fontSize: 30,
+        marginLeft: 20,
+        marginTop: 20
     },
 
     headerText: {
@@ -27,7 +40,7 @@ const styles = StyleSheet.create({
     },
 
     scrollView: {
-        height: "100%",
+        height: "80%",
         width: windowWidth,
         marginTop: "12%",
     },
@@ -35,7 +48,7 @@ const styles = StyleSheet.create({
     scrollViewContainer: {
         justifyContent: 'flex-end',
         alignItems: 'center',
-        width: windowWidth - 80,
+        width: windowWidth * 0.75,
         marginHorizontal: "12%",
     },
 
@@ -83,6 +96,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#2D363D',
         marginTop: '1.5%',
+    },
+
+    equipsCard: {
+        height: windowHeight * 0.15,
+        width: windowWidth * 0.8,
+        marginBottom: '5%',
+        shadowColor: '#2D363D',
+        shadowOpacity: 0.3,
+        shadowRadius: 45,
+        shadowOffset: { width: 1, height: 13 },
+        elevation: 8,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
 

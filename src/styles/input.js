@@ -2,10 +2,9 @@ import { Dimensions, StyleSheet } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 
-
 const Input = StyleSheet.create({
     inputField: {
-        flex: 4
+        flex: 4,
     },
 
     inputFieldText: {
@@ -25,7 +24,7 @@ const Input = StyleSheet.create({
     input: {
         height: "100%",
         width: windowWidth - 100,
-        flex: 1
+        flex: 1,
     },
 });
 

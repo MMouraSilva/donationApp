@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import login from '../pages/login';
 import fluxoCadastro from '../pages/fluxoCadastro';
 import DrawerNavigator from './DrawerNavigator';
+import formEquips from './../pages/form-equipamento';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
@@ -33,7 +34,6 @@ export default class StackNavigator extends Component {
     }
 
     render() {
-        console.log(this.state.isSignedIn);
         return(
             <>
                 {
@@ -66,6 +66,17 @@ export default class StackNavigator extends Component {
                                         headerStyle: {
                                             backgroundColor: '#2D363D'
                                         }
+                                    }}
+                                />
+                                <Stack.Screen 
+                                    name="formEquips"
+                                    component={formEquips}
+                                    options={{ 
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2D363D'
+                                        },
+                                        headerTintColor: '#fff'
                                     }}
                                 />
                             </Stack.Navigator>
@@ -101,6 +112,17 @@ export default class StackNavigator extends Component {
                                     component={DrawerNavigator} 
                                     options={{ 
                                         headerShown: false
+                                    }}
+                                />
+                                <Stack.Screen 
+                                    name="formEquips"
+                                    component={formEquips}
+                                    options={{ 
+                                        title: '',
+                                        headerStyle: {
+                                            backgroundColor: '#2D363D'
+                                        },
+                                        headerTintColor: '#fff'
                                     }}
                                 />
                             </Stack.Navigator>
