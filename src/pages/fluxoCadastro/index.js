@@ -107,7 +107,7 @@ export default class fluxoCadastro extends Component {
 
     _criarConta = async () => {
         
-        const sessionCreateAccount = await this.getSessionCreategetStorageAccount();
+        const sessionCreateAccount = await this.getStorage();
 
         let { day, month, year } = await sessionCreateAccount;
         let currentYear = new Date().getFullYear();
