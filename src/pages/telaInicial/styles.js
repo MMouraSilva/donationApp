@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     textCategoria: {
         marginLeft: "10.5%",
         marginTop: '-1%',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textTransform: 'capitalize'
     },
 
     subTitle: {
@@ -76,6 +77,12 @@ const styles = StyleSheet.create({
         width: windowWidth - 80,
     },
 
+    content: {
+        flex: 7,
+        justifyContent: "center",
+        marginTop: "20%"
+    },
+
     orderContent: {
         borderBottomWidth: 2,
         borderBottomColor: '#FED500',
@@ -84,18 +91,20 @@ const styles = StyleSheet.create({
 
     orderButton: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         marginBottom: '5%'
     },
 
     orderText: {
-        fontSize: 18
+        fontSize: 18,
+        textTransform: 'capitalize'
     },
 
     orderIcon: {
         fontSize: 20,
         color: '#2D363D',
         marginTop: '1.5%',
+        position: 'absolute',
+        right: "18%"
     },
 
     equipsCard: {

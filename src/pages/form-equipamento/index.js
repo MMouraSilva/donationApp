@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Text, View, Pressable, TextInput, Alert, ScrollView } from 'react-native';
 import { container, title, content, Input, button, icon, titleView } from './../../styles/index';
 import styles from './styles.js';
-import { Picker } from '@react-native-community/picker';
+import { Picker } from '@react-native-picker/picker';
 import categoryService from './../../service/categoryService';
 import donationService  from './../../service/donationService';
 import { AntDesign as AntIcons } from '@expo/vector-icons';
