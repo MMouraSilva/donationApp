@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 
     orderView: {
         marginTop: '-15%',
-        width: windowWidth - 80,
+        width: windowWidth * 0.8,
     },
 
     content: {
@@ -104,22 +104,16 @@ const styles = StyleSheet.create({
         color: '#2D363D',
         marginTop: '1.5%',
         position: 'absolute',
-        right: "18%"
+        right: 0
     },
 
-    equipsCard: {
-        height: windowHeight * 0.15,
-        width: windowWidth * 0.8,
-        marginBottom: '5%',
-        shadowColor: '#2D363D',
-        shadowOpacity: 0.3,
-        shadowRadius: 45,
-        shadowOffset: { width: 1, height: 13 },
-        elevation: 8,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
+    categIcon: {
+        fontSize: 20,
+        color: '#2D363D',
+        marginTop: '1.5%',
+        position: 'absolute',
+        right: "18%"
+    },
 })
 
 export default styles;

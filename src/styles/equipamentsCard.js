@@ -52,7 +52,6 @@ const equipamentsCard = StyleSheet.create({
     equipDescription: {
         fontSize: 13,
         marginLeft: "4%",
-        textTransform: "capitalize"
     },
 
     view: {

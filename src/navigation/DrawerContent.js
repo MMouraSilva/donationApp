@@ -94,7 +94,7 @@ export default class DrawerContent extends Component {
                                 onPress={() => {
                                     navigation.reset({
                                         index: 0,
-                                        routes: [{ name: 'telaInicial' }],
+                                        routes: [{ name: 'DrawerNavigator' }],
                                     });
                                 }}
                             />

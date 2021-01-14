@@ -62,10 +62,14 @@ export default class Login extends Component {
         try{
             if(this.state.switchValue == false) {
                 if(this.state.emailInput.match(/@/)) {
-                    Alert.alert('E-mail Invalido');
+                    Alert.alert("Erro", 'E-mail Invalido!');
                     return;
                 }
                 userEmail = this.state.emailInput + '@aluno.ifsp.edu.br';
+            }
+            if(this.state.switchValue == true && this.state.emailInput.match(/@aluno.ifsp.edu.br/)) {
+                Alert.alert("Erro", "Para fazer login em contas do tipo recebedor desmarque a opção \"Sou um doador\"");
+                return;
             }
 
             const loginForms = {

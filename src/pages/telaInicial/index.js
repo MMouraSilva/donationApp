@@ -280,7 +280,7 @@ export default class telaInicial extends Component {
                                                         }}
                                                     >
                                                         <Text style={styles.orderText}>{categs.name}</Text>
-                                                        <Ioicon name="ios-arrow-forward" style={styles.orderIcon} />
+                                                        <Ioicon name="ios-arrow-forward" style={styles.categIcon} />
                                                     </Pressable>
                                                 </View>
                                             )

@@ -454,16 +454,16 @@ export default class fluxoCadastro extends Component {
                                 <View style={Input.inputField}>
                                     <Text style={Input.inputFieldText}> CEP </Text>
                                     <View style={Input.inputView}>
-                                    <TextInputMask
-                                        style={Input.input}
-                                        type={'zip-code'}
-                                        value={this.state.cep}
-                                        onChangeText={text => { 
-                                            this.getCep(text);
-                                            const sessionCreateAccount = { cep: text }
-                                            this.setStorage(sessionCreateAccount);
-                                        }}
-                                    />
+                                        <TextInputMask
+                                            style={Input.input}
+                                            type={'zip-code'}
+                                            value={this.state.cep}
+                                            onChangeText={text => { 
+                                                this.getCep(text);
+                                                const sessionCreateAccount = { cep: text }
+                                                this.setStorage(sessionCreateAccount);
+                                            }}
+                                        />
                                     </View>
                                     
                                     <Text style={Input.inputFieldText} > Logradouro </Text>
