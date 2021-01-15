@@ -37,8 +37,7 @@ export default class minhasDoacoes extends Component {
                 equipObject.donorName = user.data.name;
             }
 
-            const session = await this.getStorage();
-            let { id } = await session;
+            const { id } = await this.getStorage();
             const equip = await equipamentos.data;
             const userDonations = await equip.filter(equip => equip.donorId == id);
 

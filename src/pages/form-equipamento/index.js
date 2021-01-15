@@ -19,13 +19,13 @@ export default class formEquips extends Component {
   }
 
   state = {
-    donation : {
-      id : null,
+    donation: {
+      id: null,
       name: null,
       equipmentDescription: null,
       allowWithdrawalAddress: false,
       category: null,
-      donorId : null,
+      donorId: null,
       recipientId: null,
       status: null,
       interestedStudent: null,
@@ -106,9 +106,15 @@ export default class formEquips extends Component {
       // exibir para o usuario que houve um erro e voltar para a lista de equipamentos
       Alert.alert("Erro", "Não foi possível criar a doação.");
       navigation.goBack();
+      navigation.navigate('DrawerNavigator', {
+        screen: 'TabStackNavigator',
+      })
     }
     // navegar pra a lista de equipamentos
     navigation.goBack();
+    navigation.navigate('DrawerNavigator', {
+      screen: 'TabStackNavigator',
+    })
   }
 
   async updateEquip(){

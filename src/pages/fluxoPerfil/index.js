@@ -41,6 +41,7 @@ export default class fluxoPerfil extends Component {
             cep: null,
             password: null,
             passwordConfirm: null,
+            oldPassword: null
         },
         oldEmail: null,
         oldEmailConfirm: null,
@@ -98,7 +99,7 @@ export default class fluxoPerfil extends Component {
 
     async update(){
         const { navigation } = this.props;
-        if(this.state.page == "alterarSenha" && this.invalidPassword == true){
+        if(this.state.page == "alterarSenha" && this.invalidPassword()){
             Alert.alert("Erro", "As senhas devem ser iguais.");
             return;
         }
@@ -106,17 +107,21 @@ export default class fluxoPerfil extends Component {
             Alert.alert("Erro", "O email antigo está incorreto.");
             return;
         }
-            await userService.updateUser(this.state.user);
-            delete this.state.user.password
-            delete this.state.user.passwordConfirm
-            await this.setStorage(this.state.user);
-            navigation.goBack();
-            navigation.navigate('DrawerNavigator', {
-                screen: 'fluxoPerfil',
-                params: {
-                    userInfo: this.state.user,
-                }
-            })
+        const response = await userService.updateUser(this.state.user);
+        if(response.messageError && response.messageError == "invalid password"){
+            Alert.alert("Erro", "Senha invalida");
+            return;
+        }
+        delete this.state.user.password
+        delete this.state.user.passwordConfirm
+        await this.setStorage(this.state.user);
+        navigation.goBack();
+        navigation.navigate('DrawerNavigator', {
+            screen: 'fluxoPerfil',
+            params: {
+                userInfo: this.state.user,
+            }
+        })
     }
 
     invalidPassword(){
@@ -281,19 +286,19 @@ export default class fluxoPerfil extends Component {
                                     <Text style={title}>Alteração de dados: {"\n"}Senha </Text>
                                 </View>
                                 <View style={styles.inputField}>
-                                    {/*
+                                    
                                     <Text style={Input.inputFieldText}> Senha antiga </Text>
                                     <View style={Input.inputView}>
                                         <TextInput
                                             style={Input.input}
                                             secureTextEntry={this.state.secureTextEntry}
-                                            onChangeText = {(password) => this.setState({ oldPassword })}
+                                            onChangeText = {(password) => this.setValue( 'oldPassword', password )}
                                             autoCapitalize = 'none'
                                         />
                                         <Pressable onPress={this.onIconPress}>
-                                            <Icon name={this.state.iconName} size={20} />
+                                            <MtcIcon name={this.state.iconName} size={20} />
                                         </Pressable>
-                                    </View>*/}
+                                    </View>
                                     
                                     <Text style={Input.inputFieldText}> Nova senha </Text>
                                     <View style={Input.inputView}>
@@ -303,9 +308,6 @@ export default class fluxoPerfil extends Component {
                                             secureTextEntry={this.state.secureTextEntry}
                                             autoCapitalize = 'none'
                                         />
-                                        <Pressable onPress={this.onIconPress}>
-                                            <MtcIcon name={this.state.iconName} size={20} />
-                                        </Pressable>
                                     </View>
 
                                     <Text style={Input.inputFieldText}> Confirmar nova senha </Text>

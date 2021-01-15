@@ -42,10 +42,10 @@ exports.getUserById = async (userId) => {
  */
 exports.updateUser = async (user) => {
   try{
-    return axios.put(`${urlApi}/user/${user.id}`,user);
+    return await axios.put(`${urlApi}/user/${user.id}`,user);
   }
   catch(e){
-    console.log(e)
+    return e.response.data;
   }
 }
 
